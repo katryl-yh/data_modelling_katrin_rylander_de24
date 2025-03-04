@@ -1,0 +1,2 @@
+# data_modelling_katrin_rylander_de24
+Learning data modelling
