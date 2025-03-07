@@ -119,6 +119,15 @@ a) Entities:
 - adress
 - email
 
+**Borrowing**
+- borrowing_ID (Primary Key)
+- ISBN (Foreign Key)
+- membership_id (Foreigh Key)
+- borrow_date
+- return_date
+- 
+
+
 b) Relationship between entities
 
 - A Member cah have zero, one or several Borrowings
