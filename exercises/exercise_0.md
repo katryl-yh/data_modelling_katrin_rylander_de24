@@ -279,6 +279,13 @@ Table Representation:
 ### Solution
 
 a) 
+Entities:
+
+- Customer: Stores customer details.
+- Order: Represents a purchase made by a customer.
+- Product: Represents items available for sale.
+- Order_Item: A bridge entity that connects orders and products (since an order can contain multiple products, and a product can be part of multiple orders).
+- Category (Optional): If products are categorized (e.g., Electronics, Clothing).
 
 **Customer**
 - customer_id (Primary Key)
@@ -298,8 +305,10 @@ a)
 - order_ID (Primary Key)
 - customer_id (Foreign Key)
 - order_date
-- payment_status
+- total_amount
+- payment_status e.g., 'Paid', 'Pending', 'Failed'
 - shipping_date
+- order_status e.g., 'Processing', 'Shipped', 'Delivered', 'Cancelled'
 
 **Order_Product (Bridge Table)**
 - order_product_ID (Primary Key)
@@ -308,12 +317,15 @@ a)
 - quantity
 
 Relationships:
-- A customer can place multiple orders.
-- An order belongs to one customer but contains multiple products.
-- A product can be part of many orders.
-- An order can have multiple products, and a product can be in multiple orders, we need a many-to-many (M:M) relationship table.
+- A customer can place multiple orders (One-to-Many).
+- An order belongs to one customer but contains multiple products (Many-to-Many), which is resolved using Order_Product.
+- A product can be part of many orders (One-to-Many).
+- An order can have multiple products, and a product can be in multiple orders, we need a many-to-many (Many-to-Many) relationship table.
 
 b) 
+Conceptual ERD with cardinalities
+TODO: fix ERD
+<img src = "../assets/online_store.png" width=500>
 
 ## 5. University management system
 
@@ -332,7 +344,163 @@ d) Define business rules (e.g. a student can enroll in max 4 courses)
 
 ### Solution
 
+a) 
+**Entities:**
+
+- Student: Represents students enrolled in the university.
+- Course: Represents the courses offered.
+- Professor: Represents the faculty members.
+- Enrollment: A bridge entity to handle the many-to-many relationship between Student and Course.
+
+**Relationships and cardinalities:**
+
+Student (1) ⟶ (M) Enrollment (M) ⟵ (1) Course
+
+- A student can enroll in multiple courses.
+- A course can have multiple students.
+
+Professor (1) ⟶ (M) Course
+
+- A professor can teach multiple courses
+- Each course is assigned to one professor.
+
+Department (1) ⟶ (M) Professor
+
+- A department can have multiple professors
+- A professor belongs to one department.
+
+b) 
+**Student**
+- student_id (PK) , university-issued number
+- first_name
+- last_name
+- personal_number, based on the national ID
+- email
+- program (Degree program, e.g., Computer Science)
+- status e.g. active, paused, resigned
+
+**Course**
+- course_id (PK)
+- name
+- credits
+- professor_id (FK → Professor)
+
+**Professor**
+- professor_id (PK)
+- name
+- email
+- department_id (FK → Department)
+
+**Department**
+- department_id (PK)
+- name
+
+**Enrollment**
+- enrollment_id (PK)
+- student_id (FK → Student)
+- course_id (FK → Course)
+- enrollment_date
+- grade
+
 c)
 Conceptual ERD with cardinalities
 
 <img src = "../assets/uni_management_system.png" width=500>
+
+d) 
+
+**Business Rules**
+- A student can enroll in a maximum of 4 courses per semester.
+- A professor can teach up to 3 courses per semester.
+- A course can have a maximum of 50 students enrolled.
+- A student cannot enroll in the same course more than once during the same semester.
+- A department must have at least one professor.
+
+
+<img src = "../assets/university_ex0_5.png" width=500>
+
+
+## 6. Onshop
+
+An e-commerce platform Onshop manages customers, orders, and products.
+
+- a customer can place multiple orders.
+- each order contains multiple products.
+- a product can belong to multiple categories.
+
+a) Identify key entities and their attributes (e.g., customer_name, order_date)
+
+b) Sketch the conceptual ERD.
+
+c) Define business rules
+
+### Solution
+
+a) 
+
+**Key Entities and Attributes**
+
+**Customer**
+- customer_id (PK)
+- first_name
+- last_name
+- email
+- phone
+- address
+- registration_date
+
+**Product**
+- product_id (PK)
+- name
+- description
+- price
+- stock_quantity
+
+**Category**
+- category_id (PK)
+- name
+
+**Product_Category** (Bridge Table for Many-to-Many relationship between Product & Category)
+- product_id (FK → Product)
+- category_id (FK → Category)
+
+**Order**
+- order_id (PK)
+- customer_id (FK → Customer)
+- order_date
+- total_amount
+- status (e.g., Pending, Shipped, Delivered, Cancelled)
+- payment_status (Paid, Unpaid)
+- shipping_date
+
+**Order_Item** (Bridge Table for Many-to-Many between Order & Product)
+- order_item_id (PK)
+- order_id (FK → Order)
+- product_id (FK → Product)
+- quantity
+- subtotal
+
+b) 
+
+**Conceptual ERD with Cardinalities**
+
+- Customer (1) ⟶ (M) Order
+A customer can place multiple orders, but an order belongs to only one customer.
+
+- Order (1) ⟶ (M) Order_Item (M) ⟵ (1) Product
+An order can have multiple products, and a product can be part of multiple orders.
+
+- Product (1) ⟶ (M) Product_Category (M) ⟵ (1) Category
+A product can belong to multiple categories, and a category can contain multiple products.
+
+<img src = "../assets/onshop_ex0_6.png" width=500>
+
+c)
+**Business Rules**
+- A customer can place multiple orders 
+- A customer cannot place an order if their cart is empty (cannot place an order without at least one product).
+- A product can belong to multiple categories (e.g., "Electronics" & "Accessories").
+- An order can only be placed if all products in the cart are in stock.
+- Stock quantity is updated when an order is placed.
+- Payment must be completed before an order can be shipped.
+- A product is listed under each category it belongs to.
