@@ -1,0 +1,35 @@
+{
+	"folders": {},
+	"connections": {
+		"duckdb_jdbc-1957a214b38-28bb2ebfe37c747b": {
+			"provider": "generic",
+			"driver": "duckdb_jdbc",
+			"name": "hospital_proj.duckdb",
+			"save-password": true,
+			"configuration": {
+				"database": "C:\\Users\\Katrin\\Documents\\github\\data_modelling_katrin_rylander_de24\\exercises\\sql_ex0_task_1\\hospital_proj.duckdb",
+				"url": "jdbc:duckdb:C:\\Users\\Katrin\\Documents\\github\\data_modelling_katrin_rylander_de24\\exercises\\sql_ex0_task_1\\hospital_proj.duckdb",
+				"configurationType": "MANUAL",
+				"type": "dev",
+				"closeIdleConnection": true,
+				"auth-model": "native"
+			}
+		}
+	},
+	"connection-types": {
+		"dev": {
+			"name": "Development",
+			"color": "255,255,255",
+			"description": "Regular development database",
+			"auto-commit": true,
+			"confirm-execute": false,
+			"confirm-data-change": false,
+			"smart-commit": false,
+			"smart-commit-recover": true,
+			"auto-close-transactions": true,
+			"close-transactions-period": 1800,
+			"auto-close-connections": true,
+			"close-connections-period": 14400
+		}
+	}
+}
