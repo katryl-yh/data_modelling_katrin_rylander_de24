@@ -39,7 +39,7 @@ FROM
 INSERT INTO ezecream_05.Customer (customer_id, first_name, last_name, email, address)
 VALUES
     (
-        5,
+        50,
         'Ubbe',
         'Lothbrok',
         'ragnar@kattegat.com',
