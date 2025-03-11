@@ -9,3 +9,6 @@ INNER JOIN main.HospitalDepartment hd
 INNER JOIN main.Hospital h
     ON h.hospital_id = hd.hospital_id 
 WHERE h.name = 'Sjukhusstock';
+
+SELECT *
+FROM main.HospitalDepartment hd ;
