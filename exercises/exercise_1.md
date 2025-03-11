@@ -18,5 +18,122 @@ e) Create a few tables manually, insert given data plus some more, and try to ma
 
 ### Solution
 
-a) 
-<img src = "../assets/v2_hospital_ex1_0.png" width=500>
+a)
+<img src = "../assets/v3_hospital_ex1_0.png" width=500>
+
+b)
+
+**Hospital**
+
+- hospital_id PRIMARY KEY
+- name
+- address
+
+**Department**
+
+- department_id PRIMARY KEY
+- name
+
+**Doctor**
+
+- doctor_id PRIMARY KEY
+- name
+
+**HospitalDepartment**
+
+- hospital_id FOREIGN KEY
+- department_id FOREIGN KEY
+
+**HospitalDoctor**
+
+- hospital_id FOREIGN KEY
+- doctor_id FOREIGN KEY
+
+**DepartmentDoctor**
+
+- department_id FOREIGN KEY
+- doctor_id FOREIGN KEY
+
+c)
+
+**Parent entity**
+
+- Hospital
+- Department
+- Doctor
+
+**Child entity**
+
+- HospitalDepartment
+- HospitalDoctor
+- DepartmentDoctor
+
+To define parent/child relationship follow the rules:
+
+- Parent is an entity that is referenced by other entities.
+- A child entity depends on or is associated with a parent.
+
+d)
+
+<img src = "../assets/hospital_ex1_0d.png" width=500>
+
+Hospital
+
+| hospital_id | name         | address          |
+| ----------- | ------------ | ---------------- |
+| 1           | Sjukhusstock | Drottninggatan 3 |
+| 2           | Sjukhussoder | Sodergatan 3     |
+
+Department
+
+| department_id | name       |
+| ------------- | ---------- |
+| 1             | Kardiologi |
+| 2             | Neurologi  |
+| 3             | Gynekologi |
+
+Doctor
+
+| doctor_id | name                |
+| --------- | ------------------- |
+| 1         | Dr. Abra Abrahamson |
+| 2         | Dr. Erika Eriksson  |
+| 3         | Dr. Sven Svensson   |
+| 4         | Dr. Carl Carlsson   |
+| 5         | Dr. Anna Karlsson   |
+| 6         | Dr. Sara Lindgren   |
+
+HospitalDepartment
+
+| hospital_id | department_id |
+| ----------- | ------------- |
+| 1           | 1             |
+| 1           | 2             |
+| 2           | 1             |
+| 2           | 2             |
+| 2           | 3             |
+
+HospitalDoctor
+
+| hospital_id | doctor_id |
+| ----------- | --------- |
+| 1           | 1         |
+| 1           | 2         |
+| 1           | 3         |
+| 1           | 6         |
+| 2           | 3         |
+| 2           | 4         |
+| 2           | 5         |
+| 2           | 6         |
+
+DepartmentDoctor
+
+| department_id | doctor_id |
+| ------------- | --------- |
+| 1             | 1         |
+| 1             | 6         |
+| 2             | 2         |
+| 2             | 3         |
+| 2             | 4         |
+| 3             | 5         |
+| 3             | 6         |
