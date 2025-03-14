@@ -10,17 +10,11 @@ FROM hospital_ex1.department d
 LEFT JOIN hospital_ex1.hospitaldepartment hd 
     ON d.department_id = hd.department_id 
 LEFT JOIN hospital_ex1.hospital h
-    ON h.hospital_id = hd.hospital_id;
-
-SELECT 
-    *
-FROM hospital_ex1.department d
-LEFT JOIN hospital_ex1.hospitaldepartment hd 
-    ON d.department_id = hd.department_id 
-LEFT JOIN hospital_ex1.hospital h
     ON h.hospital_id = hd.hospital_id 
 WHERE h.name = 'Sjukhusstock';
 
+----------------------------------------------------------
+-- select specific columns
 SELECT 
     d.name AS department_name,
     h.name AS hospital_name
@@ -30,6 +24,8 @@ LEFT JOIN hospital_ex1.hospitaldepartment hd
 LEFT JOIN hospital_ex1.hospital h
     ON h.hospital_id = hd.hospital_id;
 
+----------------------------------------------------------
+-- add joins to list all the doctors in one hospital
 SELECT 
     d.name AS department_name,
     h.name AS hospital_name,
@@ -38,8 +34,6 @@ FROM hospital_ex1.department d
 LEFT JOIN hospital_ex1.hospitaldepartment hd 
     ON d.department_id = hd.department_id 
 LEFT JOIN hospital_ex1.hospital h
-    ON h.hospital_id = hd.hospital_id
-LEFT JOIN hospital_ex1.hospital 
     ON h.hospital_id = hd.hospital_id
 LEFT JOIN hospital_ex1.departmentdoctor ddoc
     ON d.department_id = ddoc.department_id
@@ -67,6 +61,7 @@ LEFT JOIN hospital_ex1.hospitaldoctor hd_doc
     AND h.hospital_id = hd_doc.hospital_id  -- Ensuring the doctor belongs to the correct hospital
 WHERE h.name = 'Sjukhusstock';
 
+----------------------------------------------------------
 -- to see all doctors in a hospital and only show their department 
 -- if they belong to one, one could use this:
 
