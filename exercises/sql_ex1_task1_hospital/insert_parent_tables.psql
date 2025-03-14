@@ -1,0 +1,52 @@
+SET search_path TO hospital_ex1;
+
+INSERT INTO hospital_ex1.hospital (name, address)
+VALUES
+    (
+        'Sjukhusstock',
+        'Drottninggatan 3'
+    ),
+    (
+        'Sjukhussoder',
+        'Sodergatan 3'
+    );
+
+SELECT * FROM hospital_ex1.hospital;
+
+------------------------
+INSERT INTO hospital_ex1.department (name)
+VALUES
+    (
+        'Kardiologi'
+    ),
+    (
+        'Neurologi'
+    ),
+    (
+        'Gynekologi'
+    );
+
+SELECT * FROM hospital_ex1.department;
+-----------------------
+INSERT INTO hospital_ex1.doctor (name)
+VALUES
+    (
+        'Dr. Abra Abrahamson'
+    ),
+    (
+        'Dr. Erika Eriksson'
+    ),
+    (
+        'Dr. Sven Svensson'
+    ),
+    (
+        'Dr. Carl Carlsson'
+    ),
+    (
+        'Dr. Anna Karlsson'
+    ),
+    (
+        'Dr. Sara Lindgren'
+    );
+
+SELECT * FROM hospital_ex1.doctor;

@@ -13,3 +13,5 @@ VALUES
 
 SELECT * FROM hospital_ex1.hospital;
 
+
+

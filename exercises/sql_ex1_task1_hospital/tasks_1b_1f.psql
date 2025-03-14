@@ -1,0 +1,35 @@
+-- b) Now lets try to add a row in HospitalDepartment with a hospital_id that doesn't exist in the hospital table. 
+-- What happens here and why?
+
+INSERT INTO hospital_ex1.hospitaldepartment (hospital_id,department_id )
+VALUES
+    (
+        3,1
+    );
+
+-- ERROR: insert or update on table "hospitaldepartment" 
+-- violates foreign key constraint "hospitaldepartment_hospital_id_fkey"
+
+-- c) Do similar to b) but try adding a department_id to HospitalDepartment 
+-- that doesn't exist in the Department.
+
+INSERT INTO hospital_ex1.hospitaldepartment (hospital_id,department_id )
+VALUES
+    (
+        1,7
+    );
+
+-- ERROR: insert or update on table "hospitaldepartment" 
+-- violates foreign key constraint "hospitaldepartment_department_id_fkey"
+
+-- d) Now try to do normal delete a record in Hospital 
+-- that the HospitalDepartment refers to. What happens?
+SET search_path TO hospital_ex1;
+DELETE FROM hospital_ex1.hospital  WHERE name = 'Sjukhusstock';
+
+-- NOTHING
+
+SELECT * FROM hospital_ex1.hospital;
+
+-- e) Now use delete on cascade and check what happens.
+
