@@ -1,0 +1,56 @@
+CREATE SCHEMA IF NOT EXISTS hospital_ex1;
+
+DROP TABLE IF EXISTS hospital_ex1.Hospital CASCADE;
+DROP TABLE IF EXISTS hospital_ex1.Department CASCADE;
+DROP TABLE IF EXISTS hospital_ex1.Doctor CASCADE;
+DROP TABLE IF EXISTS hospital_ex1.HospitalDepartment CASCADE;
+DROP TABLE IF EXISTS hospital_ex1.HospitalDoctor CASCADE;
+DROP TABLE IF EXISTS hospital_ex1.DepartmentDoctor CASCADE;
+
+SET search_path TO hospital_ex1;
+
+CREATE TABLE IF NOT EXISTS 
+    hospital_ex1.Hospital (
+        hospital_id SERIAL PRIMARY KEY,
+        name VARCHAR(50) NOT NULL,
+        address VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS 
+    hospital_ex1.Department (
+        department_id SERIAL PRIMARY KEY,
+        name VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS 
+    hospital_ex1.Doctor (
+        doctor_id SERIAL PRIMARY KEY,
+        name VARCHAR(100) NOT NULL
+);
+
+-- SELECT * FROM hospital_ex1.hospital; 
+
+CREATE TABLE IF NOT EXISTS HospitalDepartment (
+    hospital_id INTEGER NOT NULL ,
+    department_id INTEGER NOT NULL ,
+    PRIMARY KEY (hospital_id, department_id), -- composite primary key
+    FOREIGN KEY (hospital_id) REFERENCES hospital_ex1.hospital (hospital_id) ON DELETE CASCADE,
+    FOREIGN KEY (department_id) REFERENCES hospital_ex1.department (department_id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS DepartmentDoctor (
+    department_id INTEGER NOT NULL ,
+    doctor_id INTEGER NOT NULL ,
+    PRIMARY KEY (department_id, doctor_id), -- composite primary key
+    FOREIGN KEY (department_id) REFERENCES hospital_ex1.department (department_id) ON DELETE CASCADE,
+    FOREIGN KEY (doctor_id) REFERENCES hospital_ex1.doctor (doctor_id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS HospitalDoctor (
+    hospital_id INTEGER NOT NULL ,
+    doctor_id INTEGER NOT NULL ,
+    PRIMARY KEY (hospital_id, doctor_id), -- composite primary key
+    FOREIGN KEY (hospital_id) REFERENCES hospital_ex1.hospital (hospital_id) ON DELETE CASCADE,
+    FOREIGN KEY (doctor_id) REFERENCES hospital_ex1.doctor (doctor_id) ON DELETE CASCADE
+);
+
