@@ -45,7 +45,13 @@ WHERE confrelid = 'hospital_ex1.doctor'::regclass;
 -- 4. Test Doctor Deletion
 DELETE FROM hospital_ex1.Doctor WHERE doctor_id = 1;
 
--- SELECT * FROM pg_tables WHERE schemaname = 'hospital_ex1';
+-- SUMMARY
+--The error happened because some foreign keys didn’t properly cascade deletions.
+-- We dropped and re-added foreign key constraints with ON DELETE CASCADE.
+
+
+-- A way to show all tables in a selected schema
+SELECT * FROM pg_tables WHERE schemaname = 'hospital_ex1';
 
 
 
