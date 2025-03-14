@@ -35,10 +35,12 @@ This is not a complete list, but some that might be useful for reference.
 | `\i <path_to_sql_script>` | To read a an SQL file                                     |
 | `\c database_name`        | Connect to a specific database                            |
 | `\dt`                     | List all tables in the current database                   |
+| `\dt schema_name.*`       | List all tables in a schema schema_name                   |
 | `\d table_name`           | Show table structure (columns, types, constraints)        |
 | `\du`                     | List all users and roles                                  |
 | `\conninfo`               | Show current connection info (user, database, host, port) |
 | `\q`                      | Quit `psql`                                               |
+
 
 ### Table management (DDL)
 

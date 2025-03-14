@@ -1,0 +1,52 @@
+-- NOTE: when I tried to run the query I got an ERROR
+-- ERROR: update or delete on table "doctor" 
+-- violates foreign key constraint 
+-- "departmentdoctor_doctor_id_fkey" on table "departmentdoctor"
+DELETE FROM hospital_ex1.doctor  WHERE name = 'Dr. Abra Abrahamson';
+
+-- FOLLOWING fix proposed by chatgtp
+-- 1. Drop Existing Constraints
+ALTER TABLE hospital_ex1.HospitalDepartment 
+DROP CONSTRAINT IF EXISTS hospitaldepartment_hospital_id_fkey,
+DROP CONSTRAINT IF EXISTS hospitaldepartment_department_id_fkey;
+
+ALTER TABLE hospital_ex1.DepartmentDoctor 
+DROP CONSTRAINT IF EXISTS departmentdoctor_department_id_fkey,
+DROP CONSTRAINT IF EXISTS departmentdoctor_doctor_id_fkey;
+
+ALTER TABLE hospital_ex1.HospitalDoctor 
+DROP CONSTRAINT IF EXISTS hospitaldoctor_hospital_id_fkey,
+DROP CONSTRAINT IF EXISTS hospitaldoctor_doctor_id_fkey;
+
+-- 2. Recreate Foreign Keys with ON DELETE CASCADE
+ALTER TABLE hospital_ex1.HospitalDepartment 
+ADD CONSTRAINT hospitaldepartment_hospital_id_fkey 
+FOREIGN KEY (hospital_id) REFERENCES hospital_ex1.hospital (hospital_id) ON DELETE CASCADE,
+ADD CONSTRAINT hospitaldepartment_department_id_fkey 
+FOREIGN KEY (department_id) REFERENCES hospital_ex1.department (department_id) ON DELETE CASCADE;
+
+ALTER TABLE hospital_ex1.DepartmentDoctor 
+ADD CONSTRAINT departmentdoctor_department_id_fkey 
+FOREIGN KEY (department_id) REFERENCES hospital_ex1.department (department_id) ON DELETE CASCADE,
+ADD CONSTRAINT departmentdoctor_doctor_id_fkey 
+FOREIGN KEY (doctor_id) REFERENCES hospital_ex1.doctor (doctor_id) ON DELETE CASCADE;
+
+ALTER TABLE hospital_ex1.HospitalDoctor 
+ADD CONSTRAINT hospitaldoctor_hospital_id_fkey 
+FOREIGN KEY (hospital_id) REFERENCES hospital_ex1.hospital (hospital_id) ON DELETE CASCADE,
+ADD CONSTRAINT hospitaldoctor_doctor_id_fkey 
+FOREIGN KEY (doctor_id) REFERENCES hospital_ex1.doctor (doctor_id) ON DELETE CASCADE;
+
+-- 3. Verify the Foreign Keys
+SELECT conrelid::regclass AS table_name, confrelid::regclass AS referenced_table, conname AS constraint_name
+FROM pg_constraint
+WHERE confrelid = 'hospital_ex1.doctor'::regclass;
+
+-- 4. Test Doctor Deletion
+DELETE FROM hospital_ex1.Doctor WHERE doctor_id = 1;
+
+-- SELECT * FROM pg_tables WHERE schemaname = 'hospital_ex1';
+
+
+
+
