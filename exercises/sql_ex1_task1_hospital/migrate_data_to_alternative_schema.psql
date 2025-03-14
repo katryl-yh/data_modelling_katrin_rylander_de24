@@ -1,0 +1,63 @@
+DROP SCHEMA hospital_ex1_migration CASCADE;
+-- 1. Create a New Schema (Copy Target)
+-- To avoid breaking the existing schema (hospital_ex1)
+
+CREATE SCHEMA hospital_ex1_migration;
+
+-- 2. Copy the Structure of All Tables (Without Data)
+--  This will create an exact replica of the tables (including primary keys, foreign keys, indexes).
+
+CREATE TABLE hospital_ex1_migration.hospital (LIKE hospital_ex1.hospital INCLUDING ALL);
+CREATE TABLE hospital_ex1_migration.department (LIKE hospital_ex1.department INCLUDING ALL);
+CREATE TABLE hospital_ex1_migration.doctor (LIKE hospital_ex1.doctor INCLUDING ALL);
+CREATE TABLE hospital_ex1_migration.hospitaldepartment (LIKE hospital_ex1.hospitaldepartment INCLUDING ALL);
+CREATE TABLE hospital_ex1_migration.departmentdoctor (LIKE hospital_ex1.departmentdoctor INCLUDING ALL);
+CREATE TABLE hospital_ex1_migration.hospitaldoctor (LIKE hospital_ex1.hospitaldoctor INCLUDING ALL);
+
+-- 3. Copy Data to the New Schema
+INSERT INTO hospital_ex1_migration.hospital SELECT * FROM hospital_ex1.hospital;
+INSERT INTO hospital_ex1_migration.department SELECT * FROM hospital_ex1.department;
+INSERT INTO hospital_ex1_migration.doctor SELECT * FROM hospital_ex1.doctor;
+INSERT INTO hospital_ex1_migration.hospitaldepartment SELECT * FROM hospital_ex1.hospitaldepartment;
+INSERT INTO hospital_ex1_migration.departmentdoctor SELECT * FROM hospital_ex1.departmentdoctor;
+INSERT INTO hospital_ex1_migration.hospitaldoctor SELECT * FROM hospital_ex1.hospitaldoctor;
+
+-- 4. Create New Table (DoctorDepartmentHospital)
+
+CREATE TABLE hospital_ex1_migration.DoctorDepartmentHospital (
+    doctor_id INTEGER NOT NULL,
+    department_id INTEGER NOT NULL,
+    hospital_id INTEGER NOT NULL,
+    PRIMARY KEY (doctor_id, department_id, hospital_id),
+    FOREIGN KEY (doctor_id) REFERENCES hospital_ex1_migration.doctor (doctor_id) ON DELETE CASCADE,
+    FOREIGN KEY (department_id) REFERENCES hospital_ex1_migration.department (department_id) ON DELETE CASCADE,
+    FOREIGN KEY (hospital_id) REFERENCES hospital_ex1_migration.hospital (hospital_id) ON DELETE CASCADE
+);
+
+-- 5. Populate the New Table
+
+INSERT INTO hospital_ex1_migration.DoctorDepartmentHospital (doctor_id, department_id, hospital_id)
+SELECT DISTINCT 
+    hd.doctor_id, 
+    dd.department_id, 
+    hd.hospital_id
+FROM hospital_ex1_migration.HospitalDoctor hd
+JOIN hospital_ex1_migration.DepartmentDoctor dd ON hd.doctor_id = dd.doctor_id
+JOIN hospital_ex1_migration.HospitalDepartment dh ON dd.department_id = dh.department_id
+WHERE hd.hospital_id = dh.hospital_id;
+
+-- 6. Drop the Old Bridge Tables (ONLY in the New Schema)
+
+DROP TABLE hospital_ex1_migration.HospitalDoctor;
+DROP TABLE hospital_ex1_migration.DepartmentDoctor;
+DROP TABLE hospital_ex1_migration.HospitalDepartment;
+
+-- 7. Verify Everything Before Switching
+SELECT * FROM hospital_ex1_migration.DoctorDepartmentHospital;
+
+SELECT d.name AS department, h.name AS hospital, doc.name AS doctor
+FROM hospital_ex1_migration.DoctorDepartmentHospital ddh
+JOIN hospital_ex1.Hospital h ON ddh.hospital_id = h.hospital_id
+JOIN hospital_ex1.Department d ON ddh.department_id = d.department_id
+JOIN hospital_ex1.Doctor doc ON ddh.doctor_id = doc.doctor_id
+WHERE h.name = 'Sjukhusstock';
