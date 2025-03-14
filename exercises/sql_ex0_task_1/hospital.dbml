@@ -1,32 +1,40 @@
 TABLE Hospital {
-    hospital_id integer [PRIMARY KEY]
+    hospital_id SERIAL [PRIMARY KEY]
     name VARCHAR(50) [UNIQUE, not null]
-    address VARCHAR(50) [not null]
+    address VARCHAR(100) [not null]
 }
 
-
 TABLE Department {
-    department_id integer [PRIMARY KEY]
+    department_id SERIAL [PRIMARY KEY]
     name VARCHAR(50) [not null]
 }
 
 TABLE Doctor {
-    doctor_id integer [PRIMARY KEY]
+    doctor_id SERIAL [PRIMARY KEY]
     name VARCHAR(50) [not null]
-}
-
-TABLE HospitalDepartment {
-    hospital_id integer [not null, ref: > Hospital.hospital_id]
-    department_id INT [not null, ref: > Department.department_id]
 }
 
 TABLE HospitalDoctor {
     hospital_id integer [not null, ref: > Hospital.hospital_id]
     doctor_id integer [not null, ref: > Doctor.doctor_id]
+    indexes {
+      (hospital_id, doctor_id) [pk]
+    }
+}
+
+TABLE HospitalDepartment {
+    hospital_id integer [not null, ref: > Hospital.hospital_id]
+    department_id INT [not null, ref: > Department.department_id]
+    indexes {
+      (hospital_id, department_id) [pk]
+    }
 }
 
 TABLE DepartmentDoctor {
     department_id integer [not null, ref: > Department.department_id ]
     doctor_id integer [ref: > Doctor.doctor_id ]
+    indexes {
+      (department_id, doctor_id) [pk]
+    }
 }
 

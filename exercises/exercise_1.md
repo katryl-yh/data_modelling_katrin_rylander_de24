@@ -19,7 +19,7 @@ e) Create a few tables manually, insert given data plus some more, and try to ma
 ### Solution
 
 a)
-<img src = "../assets/v3_hospital_ex1_0.png" width=500>
+<img src = "../assets/v4_hospital_ex1_0.png" width=500>
 
 b)
 
@@ -137,3 +137,47 @@ DepartmentDoctor
 | 2             | 4         |
 | 3             | 5         |
 | 3             | 6         |
+
+e)
+
+The current layout od my database does not allow to satisfy the condition that a doctor can work at several departments and several hospitals.
+It do not get correct results when querying after join operations.
+I will try to solve this problem by introducting another table:
+
+DoctorDepartmentHospital
+
+| doctor_id | department_id | hospital_id |
+| --------- | ------------- | ----------- |
+| 1         | 1             | 1           |
+| 1         | 1             | 2           |
+| 2         | 2             | 1           |
+| 3         | 2             | 1           |
+| 3         | 2             | 2           |
+| 4         | 2             | 2           |
+| 5         | 3             | 2           |
+| 6         | 3             | 2           |
+| 6         | 1             | 1           |
+
+Advantages of DoctorDepartmentHospital Table:
+
+**Removes Ambiguity**
+
+- The current structure doesn’t explicitly link a doctor to a department within a specific hospital.
+- This new table ensures that each doctor is assigned to a specific department within a specific hospital.
+
+**Simplifies Queries**
+
+- No need for multiple JOINs across different tables (HospitalDoctor, DepartmentDoctor, HospitalDepartment).
+- A single table directly links doctors, departments, and hospitals.
+
+**More Accurate Data Representation**
+
+- Prevents errors where a doctor appears in a department but not in any hospital.
+- Ensures that a doctor is linked to a department within a hospital, not just separately to both.
+
+**Comparison: Current vs. New Approach**
+
+| Approach                       | Pros                                            | Cons                                            |
+| ------------------------------ | ----------------------------------------------- | ----------------------------------------------- |
+| Current (Separate Tables)      | Easier to understand initially                  | Requires more joins, possible inconsistencies   |
+| New (DoctorDepartmentHospital) | Simplifies queries, ensures clear relationships | Slightly more data redundancy but avoids errors |

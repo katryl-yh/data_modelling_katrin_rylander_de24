@@ -46,3 +46,56 @@ LEFT JOIN hospital_ex1.departmentdoctor ddoc
 LEFT JOIN hospital_ex1.doctor doc
     ON doc.doctor_id = ddoc.doctor_id
 WHERE h.name = 'Sjukhusstock';
+
+-- query corrected by chatgtp
+
+SELECT 
+    d.name AS department_name,
+    h.name AS hospital_name,
+    doc.name AS doctor_name
+FROM hospital_ex1.department d
+LEFT JOIN hospital_ex1.hospitaldepartment hd 
+    ON d.department_id = hd.department_id 
+LEFT JOIN hospital_ex1.hospital h
+    ON h.hospital_id = hd.hospital_id
+LEFT JOIN hospital_ex1.departmentdoctor ddoc
+    ON d.department_id = ddoc.department_id
+LEFT JOIN hospital_ex1.doctor doc
+    ON doc.doctor_id = ddoc.doctor_id
+LEFT JOIN hospital_ex1.hospitaldoctor hd_doc
+    ON doc.doctor_id = hd_doc.doctor_id
+    AND h.hospital_id = hd_doc.hospital_id  -- Ensuring the doctor belongs to the correct hospital
+WHERE h.name = 'Sjukhusstock';
+
+-- to see all doctors in a hospital and only show their department 
+-- if they belong to one, one could use this:
+
+SELECT 
+    COALESCE(d.name, 'No Department') AS department_name,
+    h.name AS hospital_name,
+    doc.name AS doctor_name
+FROM hospital_ex1.hospital h
+LEFT JOIN hospital_ex1.hospitaldoctor hd_doc
+    ON h.hospital_id = hd_doc.hospital_id
+LEFT JOIN hospital_ex1.doctor doc
+    ON hd_doc.doctor_id = doc.doctor_id
+LEFT JOIN hospital_ex1.departmentdoctor ddoc
+    ON doc.doctor_id = ddoc.doctor_id
+LEFT JOIN hospital_ex1.department d
+    ON ddoc.department_id = d.department_id
+WHERE h.name = 'Sjukhusstock';
+
+SELECT 
+    COALESCE(d.name, 'No Department') AS department_name,
+    h.name AS hospital_name,
+    doc.name AS doctor_name
+FROM hospital_ex1.hospital h
+LEFT JOIN hospital_ex1.hospitaldoctor hd_doc
+    ON h.hospital_id = hd_doc.hospital_id
+LEFT JOIN hospital_ex1.doctor doc
+    ON hd_doc.doctor_id = doc.doctor_id
+LEFT JOIN hospital_ex1.departmentdoctor ddoc
+    ON doc.doctor_id = ddoc.doctor_id
+LEFT JOIN hospital_ex1.department d
+    ON ddoc.department_id = d.department_id;
+
