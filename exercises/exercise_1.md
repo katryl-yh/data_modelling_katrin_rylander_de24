@@ -279,7 +279,7 @@ DEFINITION:
 A composite entity (also called an associative entity) is a table that connects two or more other tables in a many-to-many relationship. 
 It contains foreign keys from the related tables and often has its own primary key.
 
-The composite entities in sakilla are :
+The composite entities (solve many-to-many relationships) in sakilla are :
 - film_category
 - film_actor
 - staff
@@ -290,6 +290,7 @@ The composite entities in sakilla are :
 
 d) Try to find suitable relationship labels between entities
 
+<img src = "../assets/ex1_3d.png" width=1000>
 
 e) Try to write out some possible relationship statements between the entities.
 
