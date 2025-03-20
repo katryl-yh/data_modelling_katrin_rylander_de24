@@ -1,0 +1,29 @@
+-- Write SQL code to get the total price for Ragnar Lodbrok.
+
+SELECT 
+    ods.order_id AS order_id,
+    det.product_id,
+    det.quantity,
+    det.price_sek,
+    det.quantity * det.price_sek AS total_per_product,
+    cus.customer_name AS customer_name
+FROM ex2_ezecream.orders ods
+LEFT JOIN ex2_ezecream.customer cus
+    ON ods.customer_id = cus.customer_id
+LEFT JOIN ex2_ezecream.order_detail det
+    ON det.order_id = ods.order_id
+WHERE cus.customer_name = 'Ragnar Lodbrok';
+
+-------------
+
+SELECT 
+    ods.order_id AS order_id,
+    SUM(det.quantity * det.price_sek ) AS price_per_order,
+    cus.customer_name AS customer_name
+FROM ex2_ezecream.orders ods
+LEFT JOIN ex2_ezecream.customer cus
+    ON ods.customer_id = cus.customer_id
+LEFT JOIN ex2_ezecream.order_detail det
+    ON det.order_id = ods.order_id
+WHERE cus.customer_name = 'Ragnar Lodbrok'
+GROUP BY ods.order_id,cus.customer_name;

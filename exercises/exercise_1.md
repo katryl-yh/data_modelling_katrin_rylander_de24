@@ -141,7 +141,7 @@ DepartmentDoctor
 e)
 
 The current layout od my database does not allow to satisfy the condition that a doctor can work at several departments and several hospitals.
-It do not get correct results when querying after join operations.
+I do not get correct results when querying after join operations.
 I will try to solve this problem by introducting another table:
 
 DoctorDepartmentHospital

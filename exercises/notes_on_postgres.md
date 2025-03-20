@@ -1,7 +1,7 @@
 **1. Start docker**
 
 **2. Run docker**
-First run `docker-compose up -d`. 
+First run `docker compose up -d`. 
 Go into your postgres container, in this case:
 
 ```bash
