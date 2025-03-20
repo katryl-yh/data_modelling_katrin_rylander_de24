@@ -1,0 +1,33 @@
+/* List all departments in a specific hospital  
+might lead to duplicate department entries 
+because the same department
+could be linked to multiple doctors at that hospital
+*/
+-- TEST:
+SELECT dep.department_id, dep.name
+FROM hospital_ex1_migration.DoctorDepartmentHospital ddh
+LEFT JOIN hospital_ex1_migration.department dep
+ON ddh.department_id = dep.department_id
+WHERE hospital_id = 1;
+
+-- leads to duplicates!
+-----------------------------------
+
+-- Use DISTINCT to avoid it!
+
+SELECT DISTINCT department_id 
+FROM hospital_ex1_migration.DoctorDepartmentHospital
+WHERE hospital_id = 1;
+
+/* If DoctorDepartmentHospital contains multiple rows
+linking different doctors to the same department + hospital, 
+a simple SELECT without DISTINCT 
+will return multiple occurrences of the same department_id.
+*/
+
+-- ANOTHER way to remove duplicates
+
+SELECT department_id
+FROM hospital_ex1_migration.DoctorDepartmentHospital
+WHERE hospital_id = 1
+GROUP BY department_id;
