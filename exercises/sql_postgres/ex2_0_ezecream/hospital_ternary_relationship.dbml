@@ -1,0 +1,24 @@
+TABLE Hospital {
+    hospital_id SERIAL [PRIMARY KEY]
+    name VARCHAR(50) [UNIQUE, not null]
+    address VARCHAR(100) [not null]
+}
+
+TABLE Department {
+    department_id SERIAL [PRIMARY KEY]
+    name VARCHAR(50) [not null]
+}
+
+TABLE Doctor {
+    doctor_id SERIAL [PRIMARY KEY]
+    name VARCHAR(50) [not null]
+}
+
+Table DoctorDepartmentHospital {
+  doctor_id integer [not null, ref: > Doctor.doctor_id]
+  department_id integer [not null, ref: > Department.department_id]
+  hospital_id integer [not null, ref: > Hospital.hospital_id]
+  
+  primary key (doctor_id, department_id, hospital_id)
+
+}

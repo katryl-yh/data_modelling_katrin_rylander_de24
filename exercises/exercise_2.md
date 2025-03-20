@@ -283,5 +283,17 @@ DoctorDepartmentHospital
 | 6         | 1             | 1           |
 
 Which follows the following ERD:
+<img src = "../assets/ex2_2b.png" width=500>
 
 c) In your design do you have bridge tables as well in addition to the ternary relationship. Motivate why you should or should not have them.
+
+## Comparison: Keeping All Bridge Tables vs. Using Only `DoctorDepartmentHospital`
+
+| Approach                         | Pros | Cons |
+|----------------------------------|------|------|
+| **Using Only `DoctorDepartmentHospital`** | - Simpler schema with a single table for relationships. <br> - Eliminates redundancy and unnecessary tables. <br> - More normalized design. | - Queries become more complex. <br> - Harder to extract information like "all doctors in a hospital" or "all departments in a hospital." <br> - Potential data redundancy in queries. |
+| **Keeping All Bridge Tables (`HospitalDoctor`, `DepartmentDoctor`, `HospitalDepartment`) + `DoctorDepartmentHospital`** | - Easier querying (e.g., listing all doctors at a hospital without worrying about departments). <br> - More flexible for tracking relationships. <br> - Easier updates without affecting unrelated entities. | - Requires more storage. <br> - Higher risk of data inconsistency if relationships are not properly managed. <br> - Adds complexity to schema management. |
+
+### **Recommendation**
+- If you only need to model **doctors working in specific departments at specific hospitals**, **`DoctorDepartmentHospital` is enough**.
+- If you need **flexible queries** (e.g., listing all doctors in a hospital regardless of department), keeping **bridge tables as well** is a better option.
