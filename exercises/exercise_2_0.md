@@ -44,18 +44,18 @@ b1) Does this table satisfy 1NF, 2NF? Motivate.
 **ANSWER**
 
 **checklist 1NF**
-✅ row order doesn't matter
-✅ Primary Key (PK) exists in each table
+✅ row order doesn't matter<br>
+✅ Primary Key (PK) exists in each table<br>
 NOTE: We assume a composite key (order_id, product_id).
-However, this prevents the same customer from adding the same product to an order with a different quantity.
-✅ No repeting groups  
-✅ Unifor column data (atomic values, one data type per attribute)
+However, this prevents the same customer from adding the same product to an order with a different quantity.<br>
+✅ No repeting groups  <br>
+✅ Unifor column data (atomic values, one data type per attribute)<br>
 
 The table satisfies 1NF: all attributes are atomic and uniquely identified by the PK.
 
 **checklist 2NF**
-✅ 1NF is satisfied
-🔴 Non prime attributes must be functionally dependent on entire PK,not just part of it:
+✅ 1NF is satisfied<br>
+🔴 Non prime attributes must be functionally dependent on entire PK,not just part of it:<br>
 
 - Problem: customer_name and customer_address depend only on customer_id,
   not on the full composite key (order_id, product_id).

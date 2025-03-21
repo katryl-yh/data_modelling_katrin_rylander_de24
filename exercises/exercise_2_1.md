@@ -17,14 +17,14 @@ https://dataedo.com/samples/html/Sakila/doc/Sakila_8/tables/inventory_3894.html
 Sakila Database Evaluation:
 
 First Normal Form (1NF):
-✅ The order in which data is stored does not matter.
-✅ Each table has a primary key, ensuring unique identification of rows.
-✅ All columns contain atomic (indivisible) values.
-✅ Each column contains values of a single type.
+✅ The order in which data is stored does not matter.<br>
+✅ Each table has a primary key, ensuring unique identification of rows.<br>
+✅ All columns contain atomic (indivisible) values.<br>
+✅ Each column contains values of a single type.<br>
 
 Second Normal Form (2NF):
-✅ The table is in 1NF.
-✅ All non-key attributes are fully functionally dependent on the entire primary key.
+✅ The table is in 1NF.<br>
+✅ All non-key attributes are fully functionally dependent on the entire primary key.<br>
 
 WHY?
 
@@ -32,8 +32,8 @@ WHY?
 - No column is only dependent on part of the primary key.
 
 Third Normal Form (3NF):
-✅ The table is in 2NF.
-✅ No transitive dependencies: Non-key attributes should only depend on the primary key and not on another non-key attribute.
+✅ The table is in 2NF.<br>
+✅ No transitive dependencies: Non-key attributes should only depend on the primary key and not on another non-key attribute.<br>
 
 **_Conclusion_**
 Yes, the Sakila schema fulfills 3NF!
