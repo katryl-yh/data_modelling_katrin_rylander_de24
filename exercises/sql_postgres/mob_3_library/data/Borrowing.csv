@@ -1,4 +1,4 @@
-﻿borrowing_id,member_id,inventory_id,borrow_date,return_date
+borrowing_id,member_id,inventory_id,borrow_date,return_date
 1,2,2,2025-03-08,2025-03-27
 2,3,3,2025-03-11,2025-03-29
 3,4,4,2025-02-21,2025-03-14

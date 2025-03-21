@@ -1,4 +1,4 @@
-﻿member_id,member_name,email,address_id,library_id
+member_id,member_name,email,address_id,library_id
 1,Anders Andersson,anders@andersson@mail.com,1,1
 2,Betty Bettydotter,betty@bettydotter@mail.com,2,2
 3,Carl Carlsson,carl@carlsson@mail.com,3,1

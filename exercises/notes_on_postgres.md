@@ -91,3 +91,12 @@ This is not a complete list, but some that might be useful for reference.
 | `DELETE FROM table_name;`                                            | Delete all rows (**use with caution**) |
 
 ---
+To copy multiple .csv files from your local machine into a Docker container, you can use the docker cp command. <br>
+If your container is already running, you can copy multiple .csv files like this:
+
+`docker cp /local/path/*.csv container_name:/container/path/`
+
+In my case:
+docker cp 
+C:/Users/Katrin/Documents/github/data_modelling_katrin_rylander_de24/exercises/sql_postgres/mob_3_library/data/*.csv 
+6f536aaad8d0:/var/lib/postgresql/data/library_data
