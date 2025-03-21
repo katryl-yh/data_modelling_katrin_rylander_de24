@@ -43,7 +43,7 @@ b1) Does this table satisfy 1NF, 2NF? Motivate.
 
 **ANSWER**
 
-**checklist 1NF**
+**checklist 1NF**<br>
 ✅ row order doesn't matter<br>
 ✅ Primary Key (PK) exists in each table<br>
 NOTE: We assume a composite key (order_id, product_id).
@@ -53,7 +53,7 @@ However, this prevents the same customer from adding the same product to an orde
 
 The table satisfies 1NF: all attributes are atomic and uniquely identified by the PK.
 
-**checklist 2NF**
+**checklist 2NF**<br>
 ✅ 1NF is satisfied<br>
 🔴 Non prime attributes must be functionally dependent on entire PK,not just part of it:<br>
 
