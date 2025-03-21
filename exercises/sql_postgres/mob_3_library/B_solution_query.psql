@@ -1,0 +1,68 @@
+-- Count the number of records in each table
+
+SELECT 'District' AS table_name, COUNT(*) FROM library.District
+UNION ALL
+SELECT 'Address', COUNT(*) FROM library.Address
+UNION ALL
+SELECT 'Library', COUNT(*) FROM library.Library
+UNION ALL
+SELECT 'Member', COUNT(*) FROM library.Member
+UNION ALL
+SELECT 'Personal_info', COUNT(*) FROM library.Personal_info
+UNION ALL
+SELECT 'Book', COUNT(*) FROM library.Book
+UNION ALL
+SELECT 'Author', COUNT(*) FROM library.Author
+UNION ALL
+SELECT 'BookAuthor', COUNT(*) FROM library.BookAuthor
+UNION ALL
+SELECT 'Category', COUNT(*) FROM library.Category
+UNION ALL
+SELECT 'BookCategory', COUNT(*) FROM library.BookCategory
+UNION ALL
+SELECT 'Inventory', COUNT(*) FROM library.Inventory
+UNION ALL
+SELECT 'Borrowing', COUNT(*) FROM library.Borrowing;
+
+-- Check borrowed books with members' names
+
+SELECT b.borrowing_id, m.member_name, b.inventory_id, b.borrow_date, b.return_date
+FROM library.Borrowing b
+JOIN library.Member m ON b.member_id = m.member_id;
+
+-- Check borrowed books with members' names AND book titles
+
+SELECT 
+    b.borrowing_id, 
+    m.member_name, 
+    bk.book_title,
+    b.borrow_date, 
+    b.return_date
+FROM library.Borrowing b
+JOIN library.Member m ON b.member_id = m.member_id
+JOIN library.inventory inv ON b.inventory_id = inv.inventory_id
+JOIN library.book bk ON bk.book_id = inv.book_id;
+
+-- Find books currently borrowed (not yet returned)
+
+SELECT 
+    b.borrowing_id, 
+    bk.book_title, 
+    m.member_name, 
+    b.borrow_date,
+    bk.loan_duration
+FROM library.Borrowing b
+JOIN library.Inventory i ON b.inventory_id = i.inventory_id
+JOIN library.Book bk ON i.book_id = bk.book_id
+JOIN library.Member m ON b.member_id = m.member_id
+WHERE b.return_date IS NULL;
+
+--  List books in inventory with their library location
+
+SELECT i.inventory_id, b.book_title, l.library_name
+FROM library.Inventory i
+JOIN library.Book b ON i.book_id = b.book_id
+JOIN library.Library l ON i.library_id = l.library_id
+ORDER BY library_name, inventory_id ;
+
+
