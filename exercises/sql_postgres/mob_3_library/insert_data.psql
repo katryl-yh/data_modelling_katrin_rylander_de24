@@ -1,0 +1,90 @@
+-- SELECT tablename FROM pg_tables WHERE schemaname = 'library';
+-- SET search_path TO library;  -- Use your schema
+
+-- Load Districts
+COPY library.District(district_id, district_name, city)
+FROM '/var/lib/postgresql/data/library_data/District.csv'
+DELIMITER ',' CSV HEADER;
+
+SELECT * FROM library.District;
+
+-- Load Addresses
+COPY library.Address(address_id, street, street_number, district_id)
+FROM '/var/lib/postgresql/data/library_data/Address.csv'
+DELIMITER ',' CSV HEADER;
+
+SELECT * FROM library.Address;
+
+-- Load Libraries
+COPY library.Library(library_id, library_name, address_id)
+FROM '/var/lib/postgresql/data/library_data/Library.csv'
+DELIMITER ',' CSV HEADER;
+
+SELECT * FROM library.Library;
+
+-- Load Members
+COPY library.Member(member_id, member_name, email, address_id, library_id)
+FROM '/var/lib/postgresql/data/library_data/Member.csv'
+DELIMITER ',' CSV HEADER;
+
+SELECT * FROM library.Member;
+
+-- Load Personal Info
+COPY library.Personal_info(personal_number, member_id)
+FROM '/var/lib/postgresql/data/library_data/Personal_Info.csv'
+DELIMITER ',' CSV HEADER;
+
+SELECT * FROM library.Personal_info;
+
+-- Load Books
+COPY library.Book(book_id, book_title, loan_duration, ISBN)
+FROM '/var/lib/postgresql/data/library_data/Book.csv'
+DELIMITER ',' CSV HEADER;
+
+SELECT * FROM library.Book;
+
+-- Load Authors
+COPY library.Author(author_id, author_name)
+FROM '/var/lib/postgresql/data/library_data/Author.csv'
+DELIMITER ',' CSV HEADER;
+
+SELECT * FROM library.Author;
+
+-- Load BookAuthor
+COPY library.BookAuthor(author_id, book_id)
+FROM '/var/lib/postgresql/data/library_data/BookAuthor.csv'
+DELIMITER ',' CSV HEADER;
+
+SELECT * FROM library.BookAuthor;
+
+-- Load Categories
+COPY library.Category(category_id, category_name)
+FROM '/var/lib/postgresql/data/library_data/Category.csv'
+DELIMITER ',' CSV HEADER;
+
+SELECT * FROM library.Category;
+
+-- Load BookCategory
+COPY library.BookCategory(book_id, category_id)
+FROM '/var/lib/postgresql/data/library_data/BookCategory.csv'
+DELIMITER ',' CSV HEADER;
+
+SELECT * FROM library.BookCategory;
+
+-- Load Inventory
+COPY library.Inventory(inventory_id, book_id, library_id)
+FROM '/var/lib/postgresql/data/library_data/Inventory.csv'
+DELIMITER ',' CSV HEADER;
+
+SELECT * FROM library.Inventory;
+
+-- Load Borrowing
+COPY library.Borrowing(borrowing_id, member_id, inventory_id, borrow_date, return_date)
+FROM '/var/lib/postgresql/data/library_data/Borrowing.csv'
+DELIMITER ',' CSV HEADER;
+
+SELECT * FROM library.Borrowing;
+
+
+
+
