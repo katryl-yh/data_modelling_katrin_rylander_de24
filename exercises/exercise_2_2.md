@@ -10,12 +10,12 @@ a) Does the design fulfill 3NF, motivate based on the rules for the normal forms
 
 <img src = "../assets/v4_hospital_ex1_0.png" width=500>
 
-First Normal Form (1NF):
+First Normal Form (1NF):<br>
 ✅ Each column must have atomic values (no multiple values in one column).<br>
 ✅ Each row must be uniquely identifiable (i.e., have a primary key).<br>
 ✅ Each column must contain only a single type of data.<br>
 
-Second Normal Form (2NF):
+Second Normal Form (2NF):<br>
 ✅ The table is in 1NF.<br>
 ✅ No partial dependency: Every non-key attribute must be fully dependent on the entire primary key (not just part of it).<br>
 
@@ -28,7 +28,7 @@ hospital_id -> name, address (depends on the address, if in the field address we
 department_id -> name
 doctor_id -> name 
 
-Third Normal Form (3NF):
+Third Normal Form (3NF):<br>
 ✅ The table is in 2NF.<br>
 ✅ No transitive dependencies: Non-key attributes should only depend on the primary key and not on another non-key attribute.<br>
 
