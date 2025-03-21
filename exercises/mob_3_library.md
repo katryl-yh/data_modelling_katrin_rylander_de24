@@ -9,6 +9,7 @@ Task:
 Here is an initial, logical ERD diagram for the library:
 https://lucid.app/lucidchart/839938a4-9034-4347-8ac3-cf80b23ee55f/edit?invitationId=inv_9c3dd72d-0e65-45b5-89f4-70c2afc098ff&page=0_0#
 
+<img src = "../assets/Library.png" width=1000>
 #### Entities 
 
 **Member** 
