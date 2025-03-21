@@ -40,6 +40,7 @@ This is not a complete list, but some that might be useful for reference.
 | `\du`                     | List all users and roles                                  |
 | `\conninfo`               | Show current connection info (user, database, host, port) |
 | `\q`                      | Quit `psql`                                               |
+| `\dn`                     | display all available schemas in selected PostgreSQL database|
 
 
 ### Table management (DDL)
