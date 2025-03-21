@@ -172,3 +172,19 @@ LEFT JOIN ex2_ezecream.order_detail det
 WHERE cus.customer_name = 'Ragnar Lodbrok'
 GROUP BY ods.order_id,cus.customer_name;
 ```
+
+NOTE: <br>
+In order to automate inserting data into ezecream tables:
+- make a spreadsheet with separate sheets for each table
+- export each sheet into .csv file with correct name
+- copy the .csv file in bash to your container
+- use 
+
+
+**Copy files into docker container**
+Use:
+`docker cp customer.csv <container_id>:/var/lib/postgresql/data`
+where:
+- <container_id> should be replaced with the ID of the container that is running the database
+- in my case, as specified in .yaml file the destination foler is 
+`/var/lib/postgresql/data`
