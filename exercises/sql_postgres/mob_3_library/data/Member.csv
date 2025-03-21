@@ -1,0 +1,11 @@
+﻿member_id,member_name,email,address_id,library_id
+1,Anders Andersson,anders@andersson@mail.com,1,1
+2,Betty Bettydotter,betty@bettydotter@mail.com,2,2
+3,Carl Carlsson,carl@carlsson@mail.com,3,1
+4,Diana Dianadotter,diana@dianadotter@mail.com,4,2
+5,Erik Eriksson,erik@eriksson@mail.com,5,2
+6,Frida Fridadotter,frida@fridadotter@mail.com,6,2
+7,Gustav Gustavsson,gustav@gustavsson@mail.com,7,2
+8,Hanna Hannadotter,hanna@hannadotter@mail.com,8,2
+9,Isak Isaksson,isak@isaksson@mail.com,9,1
+10,Jenny Jennydotter,jenny@jennydotter@mail.com,10,1
