@@ -1,0 +1,23 @@
+-- Copy Data from Old Schema (library) to New Schema (library_solution_a)
+
+INSERT INTO library_solution_a.District SELECT * FROM library.District;
+INSERT INTO library_solution_a.Address SELECT * FROM library.Address;
+INSERT INTO library_solution_a.Library SELECT * FROM library.Library;
+INSERT INTO library_solution_a.Member SELECT * FROM library.Member;
+INSERT INTO library_solution_a.Personal_info SELECT * FROM library.Personal_info;
+INSERT INTO library_solution_a.Book SELECT * FROM library.Book;
+INSERT INTO library_solution_a.Author SELECT * FROM library.Author;
+INSERT INTO library_solution_a.BookAuthor SELECT * FROM library.BookAuthor;
+INSERT INTO library_solution_a.Category SELECT * FROM library.Category;
+INSERT INTO library_solution_a.BookCategory SELECT * FROM library.BookCategory;
+INSERT INTO library_solution_a.Inventory SELECT * FROM library.Inventory;
+INSERT INTO library_solution_a.Borrowing SELECT * FROM library.Borrowing;
+
+-- Verify Data in New Schema
+
+SELECT table_name FROM information_schema.tables WHERE table_schema = 'library_solution_a';
+
+-- Check if data is copied correctly:
+
+SELECT COUNT(*) FROM library_solution_a.Borrowing;
+SELECT COUNT(*) FROM library_solution_a.Inventory;

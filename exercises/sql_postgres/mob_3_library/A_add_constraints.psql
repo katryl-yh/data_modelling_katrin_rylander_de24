@@ -1,0 +1,56 @@
+-- Add a Trigger
+/* In this scenario we need to ensure that both the book and the member 
+belong to the same library before recording a borrowing transaction.
+A trigger is the appropriate mechanism in PostgreSQL. 
+This is because CHECK constraints in PostgreSQL 
+cannot reference other tables or contain subqueries*/
+
+
+/* Define the Trigger Function
+
+This function will check if the inventory_id being borrowed 
+belongs to the same library_id as the member's registered library.*/
+
+-- Define or replace a trigger function named 'check_library_match'
+CREATE OR REPLACE FUNCTION check_library_match()
+RETURNS TRIGGER AS $$
+BEGIN
+    -- Perform a check to ensure the inventory item belongs to the same library as the member
+    IF NOT EXISTS (
+        -- Select statement to verify the relationship between inventory and member
+        SELECT 1
+        FROM library_solution_a.Inventory i
+        -- Join the Inventory table with the Member table on library_id
+        JOIN library_solution_a.Member m ON i.library_id = m.library_id
+        -- Conditions to match the specific inventory item and member involved in the operation
+        WHERE i.inventory_id = NEW.inventory_id
+          AND m.member_id = NEW.member_id
+    ) THEN
+        -- If the inventory item and member do not belong to the same library, raise an exception
+        RAISE EXCEPTION 'Library mismatch: Member % cannot borrow inventory item % from a different library.',
+                        NEW.member_id, NEW.inventory_id;
+    END IF;
+    -- If the check passes, allow the operation to proceed by returning the new record
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+/* Attach the trigger to the Borrowing table 
+to execute the function before any insert operation.*/
+
+CREATE TRIGGER trg_check_library_match
+BEFORE INSERT ON library_solution_a.Borrowing
+FOR EACH ROW
+EXECUTE FUNCTION check_library_match();
+
+/* In this trigger setup:​
+
+BEFORE INSERT OR UPDATE ON library_solution_a.Borrowing
+It specifies that the trigger should fire before an INSERT or UPDATE operation
+on the Borrowing table.​
+
+FOR EACH ROW
+It indicates that the trigger should execute for each row affected by the operation.​
+
+EXECUTE FUNCTION check_library_match();
+It calls the check_library_match function to perform the necessary validation.

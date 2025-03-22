@@ -1,0 +1,16 @@
+CREATE SCHEMA library_solution_a;
+
+
+/*Instead of manually recreating each table, use 
+CREATE TABLE ... LIKE to copy the structure of each table without data*/
+
+DO $$ 
+DECLARE r RECORD;
+BEGIN
+    FOR r IN 
+        SELECT tablename FROM pg_tables WHERE schemaname = 'library'
+    LOOP
+        EXECUTE format('CREATE TABLE library_solution_a.%I (LIKE library.%I INCLUDING ALL);', r.tablename, r.tablename);
+    END LOOP;
+END $$;
+

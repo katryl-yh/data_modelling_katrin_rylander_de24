@@ -1,0 +1,16 @@
+DO $$ 
+DECLARE 
+    r RECORD;
+BEGIN 
+    -- Drop all tables in the schema
+    FOR r IN (SELECT tablename FROM pg_tables WHERE schemaname = 'library') 
+    LOOP 
+        EXECUTE 'DROP TABLE library.' || r.tablename || ' CASCADE';
+    END LOOP;
+
+    -- Reset sequences for auto-incremented columns
+    FOR r IN (SELECT sequence_name FROM information_schema.sequences WHERE sequence_schema = 'library') 
+    LOOP
+        EXECUTE 'ALTER SEQUENCE library.' || r.sequence_name || ' RESTART WITH 1';
+    END LOOP;
+END $$;
