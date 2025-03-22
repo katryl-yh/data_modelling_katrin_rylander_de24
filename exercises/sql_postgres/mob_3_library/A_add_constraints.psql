@@ -53,4 +53,5 @@ FOR EACH ROW
 It indicates that the trigger should execute for each row affected by the operation.​
 
 EXECUTE FUNCTION check_library_match();
-It calls the check_library_match function to perform the necessary validation.
+It calls the check_library_match function
+to perform the necessary validation.*/

@@ -1,0 +1,39 @@
+/* Insert Valid Data:
+Try to insert a record into the Borrowing table 
+where the member and the inventory item belong to the same library. 
+This operation should succeed without any issues.*/
+
+-- Insert a borrowing record where the member and inventory item are from the same library
+INSERT INTO library_solution_a.Borrowing (member_id, inventory_id, borrow_date)
+VALUES (10, 20, '2025-03-22');
+-- this gave an error:
+-- duplicate key value violates unique constraint "borrowing_pkey"
+
+-- this is how I fix it!
+-- Check the Current Maximum Primary Key Value
+SELECT MAX(borrowing_id) FROM library_solution_a.Borrowing;
+-- Check the Next Value of the Sequence
+SELECT nextval(pg_get_serial_sequence('library_solution_a.Borrowing', 'borrowing_id'));
+-- Compare and Reset the Sequence if Necessary
+SELECT setval(pg_get_serial_sequence('library_solution_a.Borrowing', 'borrowing_id'), (SELECT MAX(borrowing_id) FROM library_solution_a.Borrowing) + 1);
+
+INSERT INTO library_solution_a.Borrowing (member_id, inventory_id, borrow_date)
+VALUES (10, 20, '2025-03-22');
+
+/* Insert invalid Data */
+INSERT INTO library_solution_a.Borrowing (member_id, inventory_id, borrow_date)
+VALUES (9, 13, '2025-03-22');
+
+-- Returns an error:
+-- ERROR: Library mismatch: Member 9 cannot borrow 
+-- inventory item 13 from a different library.
+
+/* Review Trigger Information:
+
+To confirm that the trigger is correctly associated 
+with the Borrowing table, you can query the PostgreSQL
+system catalog:*/
+-- Retrieve information about triggers on the Borrowing table
+SELECT tgname, tgtype, tgrelid::regclass
+FROM pg_trigger
+WHERE tgrelid = 'library_solution_a.Borrowing'::regclass;
