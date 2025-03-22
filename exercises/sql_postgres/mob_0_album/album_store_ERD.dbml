@@ -1,0 +1,44 @@
+Table artist {
+    artist_id int [pk, increment]
+    artist_name varchar
+    country_id int [ref: > country.country_id]
+    label_id int [ref: > label.label_id]
+}
+
+Table label {
+    label_id int [pk, increment]
+    label_name varchar
+}
+
+Table country {
+    country_id int [pk, increment]
+    country_name varchar
+}
+
+Table album {
+    album_id int [pk, increment]
+    album_name varchar
+    length int
+    price decimal
+    artist_id int [ref: > artist.artist_id]
+    label_id int [ref: > label.label_id]
+    certified_sales bigint
+    RIAA_certification_no varchar
+    certification_id int [ref: > RIAA_certification.certification_id]
+}
+
+Table RIAA_certification {
+    certification_id int [pk, increment]
+    certification_type varchar
+}
+
+Table format {
+    format_id int [pk, increment]
+    format_name varchar
+}
+
+Table album_format {
+    album_id int [ref: > album.album_id]
+    format_id int [ref: > format.format_id]
+}
+

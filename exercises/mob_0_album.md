@@ -29,3 +29,52 @@ Definition:  modifying data can result in inconsistencies
 4) Update  anomaly 
 
 b) Normalize this table into 3NF
+
+Here is a logical ERD:
+<img src = "../assets/album_store_ERD.png" width=1000>
+
+### Entities
+
+**Artist**
+- artist_id (PK)
+- artist_name
+- country_id (FK)
+- label_id (FK)
+
+**Label**
+- label_id (PK)
+- label_name 
+
+**Country**
+- country_id (PK)
+- country_name
+
+**Album**
+- album_id (PK)
+- album_name
+- length 
+- price
+- artist_id (FK)
+- label_id (FK)
+- certified_sales
+- RIAA_certification_no
+- certification_id (FK)
+
+**RIAA_certification**
+- certification_id (PK)
+- certification_type
+
+NOTE: certification_type can be: None, Gold, Platinum, Multi-Platinum, Diamond
+RIAA_certification_no would be NULL if there is no type assigned to it!
+**Format**
+- format_id (PK)
+- format_name 
+
+NOTE: format name can be: vinyl, CD, Digital OR a combination!
+
+**AlbumFormat** composite table
+- album_id (FK)
+- format_id (FK)
+
+
+
