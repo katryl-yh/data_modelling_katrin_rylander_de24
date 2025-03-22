@@ -1,0 +1,55 @@
+CREATE SCHEMA IF NOT EXISTS album_store;
+
+SET search_path TO album_store;
+
+-- Country Table
+CREATE TABLE album_store.country (
+    country_id SERIAL PRIMARY KEY,
+    country_name VARCHAR(100) NOT NULL
+);
+
+-- Label Table
+CREATE TABLE album_store.label (
+    label_id SERIAL PRIMARY KEY,
+    label_name VARCHAR(100) NOT NULL
+);
+
+-- Artist Table
+CREATE TABLE album_store.artist (
+    artist_id SERIAL PRIMARY KEY,
+    artist_name VARCHAR(100) NOT NULL,
+    country_id INT REFERENCES album_store.country(country_id),
+    label_id INT REFERENCES album_store.label(label_id)
+);
+
+-- RIAA_Types Table
+CREATE TABLE album_store.riaa_types (
+    certification_id SERIAL PRIMARY KEY,
+    certification_type VARCHAR(50) NOT NULL
+);
+
+-- Album Table
+CREATE TABLE album_store.album (
+    album_id SERIAL PRIMARY KEY,
+    album_name VARCHAR(200) NOT NULL,
+    length INT,
+    price DECIMAL(10, 2),
+    artist_id INT REFERENCES album_store.artist(artist_id),
+    label_id INT REFERENCES album_store.label(label_id),
+    certified_sales BIGINT,
+    riaa_certification_no VARCHAR(50),
+    certification_id INT REFERENCES album_store.riaa_types(certification_id)
+);
+
+-- Format Table
+CREATE TABLE album_store.format (
+    format_id SERIAL PRIMARY KEY,
+    format_name VARCHAR(50) NOT NULL
+);
+
+-- AlbumFormat Table (Composite Table)
+CREATE TABLE album_store.album_format (
+    album_id INT REFERENCES album_store.album(album_id),
+    format_id INT REFERENCES album_store.format(format_id),
+    PRIMARY KEY (album_id, format_id)
+);

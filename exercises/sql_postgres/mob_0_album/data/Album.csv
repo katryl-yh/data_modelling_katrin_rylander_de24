@@ -1,0 +1,6 @@
+album_id,album_name,length,price,artist_id,label_id,certified_sales,RIAA_certification_no,certification_id
+1,Thriller,4219,25.99,1,1,34000000,123456789,4
+2,Back in Black,4211,19.99,2,2,25000000,987654321,4
+3,The Dark Side of the Moon,4300,22.99,3,3,20000000,567890123,4
+4,Abbey Road,4703,24.99,4,4,12000000,234567890,3
+5,1989,4841,14.99,5,5,10000000,876543210,4

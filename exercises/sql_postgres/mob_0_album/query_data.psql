@@ -1,0 +1,58 @@
+-- Count Rows in Each Table
+SELECT COUNT(*) FROM album_store.country;
+SELECT COUNT(*) FROM album_store.label;
+SELECT COUNT(*) FROM album_store.artist;
+SELECT COUNT(*) FROM album_store.riaa_types;
+SELECT COUNT(*) FROM album_store.album;
+SELECT COUNT(*) FROM album_store.format;
+SELECT COUNT(*) FROM album_store.album_format;
+
+-- Check for Referential Integrity
+
+SELECT a.artist_id, a.artist_name
+FROM album_store.artist a
+LEFT JOIN album_store.country c ON a.country_id = c.country_id
+LEFT JOIN album_store.label l ON a.label_id = l.label_id
+WHERE c.country_id IS NULL OR l.label_id IS NULL;
+
+
+
+SELECT a.artist_id, a.artist_name
+FROM album_store.artist a
+LEFT JOIN album_store.country c ON a.country_id = c.country_id
+LEFT JOIN album_store.label l ON a.label_id = l.label_id;
+
+-- reconstruct the original table_am_handler_in
+SELECT
+    al.album_id,
+    al.album_name,
+    al.length,
+    al.price,
+    ar.artist_name,
+    c.country_name AS artist_country,
+    l.label_name,
+    al.certified_sales,
+    al.riaa_certification_no,
+    rt.certification_type,
+    STRING_AGG(f.format_name, ', ') AS available_formats
+FROM
+    album_store.album al
+    INNER JOIN album_store.artist ar ON al.artist_id = ar.artist_id
+    INNER JOIN album_store.country c ON ar.country_id = c.country_id
+    INNER JOIN album_store.label l ON al.label_id = l.label_id
+    INNER JOIN album_store.riaa_types rt ON al.certification_id = rt.certification_id
+    LEFT JOIN album_store.album_format af ON al.album_id = af.album_id
+    LEFT JOIN album_store.format f ON af.format_id = f.format_id
+GROUP BY
+    al.album_id,
+    al.album_name,
+    al.length,
+    al.price,
+    ar.artist_name,
+    c.country_name,
+    l.label_name,
+    al.certified_sales,
+    al.riaa_certification_no,
+    rt.certification_type
+ORDER BY
+    al.album_id;

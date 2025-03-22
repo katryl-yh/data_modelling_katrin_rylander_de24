@@ -1,0 +1,27 @@
+-- Import data into Country Table
+COPY album_store.country(country_id, country_name)
+FROM '/var/lib/postgresql/data/album_data/Country.csv' DELIMITER ',' CSV HEADER;
+
+-- Import data into Label Table
+COPY album_store.label(label_id, label_name)
+FROM '/var/lib/postgresql/data/album_data/Label.csv' DELIMITER ',' CSV HEADER;
+
+-- Import data into Artist Table
+COPY album_store.artist(artist_id, artist_name, country_id, label_id)
+FROM '/var/lib/postgresql/data/album_data/Artist.csv' DELIMITER ',' CSV HEADER;
+
+-- Import data into RIAA_Types Table
+COPY album_store.riaa_types(certification_id, certification_type)
+FROM '/var/lib/postgresql/data/album_data/RIAA_types.csv' DELIMITER ',' CSV HEADER;
+
+-- Import data into Album Table
+COPY album_store.album(album_id, album_name, length, price, artist_id, label_id, certified_sales, riaa_certification_no, certification_id)
+FROM '/var/lib/postgresql/data/album_data/Album.csv' DELIMITER ',' CSV HEADER;
+
+-- Import data into Format Table
+COPY album_store.format(format_id, format_name)
+FROM '/var/lib/postgresql/data/album_data/Format.csv' DELIMITER ',' CSV HEADER;
+
+-- Import data into AlbumFormat Table
+COPY album_store.album_format(album_id, format_id)
+FROM '/var/lib/postgresql/data/album_data/AlbumFormat.csv' DELIMITER ',' CSV HEADER;
