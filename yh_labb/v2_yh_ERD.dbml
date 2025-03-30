@@ -1,0 +1,151 @@
+Table student {
+    student_id int [primary key]
+    person_id int [ref: > contact_information.person_id, unique]
+    status_id int [ref: > student_status.status_id]
+}
+
+Table contact_information {
+    person_id int [primary key, increment]
+    first_name varchar
+    last_name varchar
+    email varchar [unique]
+    phone_number varchar [unique]
+    address_id int [ref: > address.address_id]
+}
+
+Table personal_information {
+    person_id int [ref: > contact_information.person_id]
+    personal_number varchar [unique]
+}
+
+Table student_status {
+    status_id int [primary key]
+    status enum('active', 'on leave', 'graduated', 'dropped out')
+}
+
+Table address {
+    address_id int [primary key]
+    street varchar
+    street_number varchar
+    postal_code varchar
+    city_id int [ref: > city.city_id]
+}
+
+Table city {
+    city_id int [primary key]
+    city_name varchar
+    country_id int [ref: > country.country_id]
+}
+
+Table country {
+    country_id int [primary key]
+    country_name varchar
+}
+
+Table program {
+    program_id int [primary key]
+    program_name varchar
+    program_duration int  // In weeks
+    total_credits int
+    approved_iterations int
+}
+
+Table course {
+    course_id int [primary key]
+    course_name varchar
+    course_code varchar
+    course_credits int
+    course_description text
+}
+
+Table class {
+    class_id int [primary key]
+    class_name varchar
+    program_id int [ref: > program.program_id]
+    iteration_number int
+    start_date date
+    end_date date
+    staff_id int [ref: > staff.staff_id]
+    school_id int [ref: > school.school_id]
+}
+
+Table staff {
+    staff_id int [primary key]
+    person_id int [ref: > contact_information.person_id, unique]
+    position_id int [ref: > position.position_id]
+    contract_type_id int [ref: > contract_type.contract_type_id]
+    company_id int [ref: > company.company_id, null]
+}
+
+Table position {
+    position_id int [primary key]
+    position_name enum('class manager', 'instructor', 'vd', 'administrator')
+}
+
+Table contract_type {
+    contract_type_id int [primary key]
+    contract_type_name enum('permanent', 'consultant', 'substitute')
+}
+
+Table company {
+    company_id int [primary key]
+    company_name varchar
+    organization_number varchar
+    tax_status_id int [ref: > tax_status.tax_status_id]
+    address_id int [ref: > address.address_id]
+    hourly_rate decimal [null]
+}
+
+Table tax_status {
+    tax_status_id int [primary key]
+    status enum('F-tax', 'A-tax', 'FA-tax')
+}
+
+Table school {
+    school_id int [primary key]
+    school_name varchar
+    address_id int [ref: > address.address_id]
+}
+
+Table class_course {
+    class_id int [ref: > class.class_id]
+    course_id int [ref: > course.course_id]
+    primary key (class_id, course_id)
+}
+
+Table class_student {
+    class_id int [ref: > class.class_id]
+    student_id int [ref: > student.student_id]
+    primary key (class_id, student_id)
+}
+
+Table course_instructor {
+    course_id int [ref: > course.course_id]
+    staff_id int [ref: > staff.staff_id]
+    primary key (course_id, staff_id)
+}
+
+Table school_staff {
+    school_id int [ref: > school.school_id]
+    staff_id int [ref: > staff.staff_id]
+    primary key (school_id, staff_id)
+}
+
+Table course_school {
+    course_id int [ref: > course.course_id]
+    school_id int [ref: > school.school_id]
+    primary key (course_id, school_id)
+}
+
+Table class_student_course {
+    class_id int [ref: > class.class_id]
+    student_id int [ref: > student.student_id]
+    course_id int [ref: > course.course_id]
+    grade_id int [ref: > grade.grade_id]
+    primary key (class_id, student_id, course_id)
+}
+
+Table grade {
+    grade_id int [primary key]
+    grade enum('fail', 'pass', 'excellent')
+}
