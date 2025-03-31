@@ -45,7 +45,7 @@ Table country {
 Table program {
     program_id int [primary key]
     program_name varchar
-    program_duration int  // In weeks
+    program_duration int  // In years
     total_credits int
     approved_iterations int
 }
