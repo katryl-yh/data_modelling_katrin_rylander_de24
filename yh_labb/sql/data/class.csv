@@ -1,0 +1,6 @@
+class_id,class_name,program_id,iteration_number ,manager_id
+1,DE23,1,1,1
+2,BIM23,2,1,2
+3,DE24,1,2,1
+4,BIM24,2,2,2
+5,UX24,3,1,2

@@ -1,0 +1,124 @@
+Table student {
+  student_id int [pk]
+  person_id int [unique, ref: > person.person_id]
+  class_id int [ref: > class.class_id]
+}
+
+Table person {
+  person_id int [pk, unique]
+  first_name varchar
+  last_name varchar
+  email varchar [unique]
+}
+
+Table personal_information {
+  person_id int [pk, ref: > person.person_id]
+  personal_number varchar [unique]
+}
+
+Table class_manager {
+  manager_id int [pk]
+  person_id int [ref: > person.person_id]
+  contract_type_id int [ref: > contract_type.contract_type_id]
+  company_id int [null, ref: > company.company_id]
+}
+
+Table instructor {
+  instructor_id int [pk]
+  person_id int [ref: > person.person_id]
+  contract_type_id int [ref: > contract_type.contract_type_id]
+  company_id int [null, ref: > company.company_id]
+}
+
+Table contract_type {
+  contract_type_id int [pk]
+  contract_type_name varchar
+}
+
+Table company {
+  company_id int [pk]
+  company_name varchar
+  organization_number varchar
+  tax_status_id int [ref: > tax_status.tax_status_id]
+  address_id int [ref: > address.address_id]
+  hourly_rate decimal [null]
+}
+
+Table tax_status {
+  tax_status_id int [pk]
+  tax_status varchar
+}
+
+Table address {
+  address_id int [pk]
+  street varchar
+  street_number varchar
+  postal_code varchar
+  city_id int [ref: > city.city_id]
+}
+
+Table city {
+  city_id int [pk]
+  city_name varchar
+  country_id int [ref: > country.country_id]
+}
+
+Table country {
+  country_id int [pk]
+  country_name varchar
+}
+
+Table program {
+  program_id int [pk]
+  program_name varchar
+  program_duration_years int
+  total_credits int
+  approved_iterations int
+}
+
+Table class {
+  class_id int [pk]
+  class_name varchar
+  program_id int [ref: > program.program_id]
+  iteration_number int
+  manager_id int [ref: > class_manager.manager_id]
+}
+
+Table course {
+  course_id int [pk]
+  course_name varchar
+  course_code varchar [unique]
+  course_credits int
+  course_description text
+}
+
+Table course_offering {
+  offering_id int [pk]
+  course_id int [ref: > course.course_id]
+  location_id int [ref: > school_location.location_id]
+  instructor_id int [ref: > instructor.instructor_id]
+  start_date date
+  end_date date
+}
+
+Table school_location {
+  location_id int [pk]
+  location_name varchar
+  address_id int [ref: > address.address_id]
+}
+
+Table program_course {
+  course_id int [pk, ref: > course.course_id]
+  program_id int [pk, ref: > program.program_id]
+}
+
+Table enrollment {
+  student_id int [pk, ref: > student.student_id]
+  course_offering_id int [pk, ref: > course_offering.offering_id]
+  grade_id int [ref: > grade.grade_id]
+}
+
+Table grade {
+  grade_id int [pk]
+  grade varchar
+}
