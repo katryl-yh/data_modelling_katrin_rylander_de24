@@ -1,0 +1,156 @@
+-- 1. retrieve information about a specific class 
+-- class_id = 1 and the manager responsible for it
+
+SELECT
+    c.class_id,
+    c.class_name,
+    c.iteration_number,
+    p.program_name,
+    p.program_duration_years,
+    p.total_credits,
+    p.approved_iterations,
+    m.manager_id,
+    per.first_name AS manager_first_name,
+    per.last_name AS manager_last_name,
+    per.email AS manager_email,
+    ct.contract_type_name,
+    co.company_name
+FROM
+    yrkesco.class c
+JOIN
+    yrkesco.program p ON c.program_id = p.program_id
+JOIN
+    yrkesco.class_manager m ON c.manager_id = m.manager_id
+JOIN
+    yrkesco.person per ON m.person_id = per.person_id
+JOIN
+    yrkesco.contract_type ct ON m.contract_type_id = ct.contract_type_id
+LEFT JOIN
+    yrkesco.company co ON m.company_id = co.company_id
+WHERE
+    c.class_id = 1; 
+
+-- query retrieves all the courses associated with a specific class,
+-- along with the course details
+
+SELECT
+    c.class_id,
+    c.class_name,
+    crs.course_id,
+    crs.course_name,
+    crs.course_code,
+    crs.course_credits,
+    crs.course_description
+FROM
+    yrkesco.class c
+JOIN
+    yrkesco.program p ON c.program_id = p.program_id
+JOIN
+    yrkesco.program_course pc ON p.program_id = pc.program_id
+JOIN
+    yrkesco.course crs ON pc.course_id = crs.course_id
+WHERE
+    c.class_id = 2; -- Change to the class_id you want
+
+-- query retrieves the number of courses associated with a specific class
+SELECT
+    c.class_id,
+    c.class_name,
+    COUNT(crs.course_id) AS course_count
+FROM
+    yrkesco.class c
+JOIN
+    yrkesco.program p ON c.program_id = p.program_id
+JOIN
+    yrkesco.program_course pc ON p.program_id = pc.program_id
+JOIN
+    yrkesco.course crs ON pc.course_id = crs.course_id
+WHERE
+    c.class_id = 3
+GROUP BY
+    c.class_id, c.class_name;
+
+-- query retrieves the instructors who teach courses in a specific class, 
+-- along with their details and the course names
+SELECT
+    c.class_id,
+    c.class_name,
+    i.instructor_id,
+    per.first_name AS instructor_first_name,
+    per.last_name AS instructor_last_name,
+    per.email AS instructor_email,
+    crs.course_name
+FROM
+    yrkesco.class c
+JOIN
+    yrkesco.program p ON c.program_id = p.program_id
+JOIN
+    yrkesco.program_course pc ON p.program_id = pc.program_id
+JOIN
+    yrkesco.course crs ON pc.course_id = crs.course_id
+JOIN
+    yrkesco.course_offering co ON crs.course_id = co.course_id
+JOIN
+    yrkesco.instructor i ON co.instructor_id = i.instructor_id
+JOIN
+    yrkesco.person per ON i.person_id = per.person_id
+WHERE
+    c.class_id = 5; -- Change to the class_id you want
+
+--  query that retrieves the instructors who teach courses 
+-- in a specific class, along with their details, 
+-- their company details and the course names
+
+SELECT
+    c.class_id,
+    c.class_name,
+    i.instructor_id,
+    per.first_name AS instructor_first_name,
+    per.last_name AS instructor_last_name,
+    per.email AS instructor_email,
+    crs.course_name,
+    co.company_name,
+    co.organization_number,
+    ts.tax_status_name,
+    a.street,
+    a.street_number,
+    a.postal_code,
+    city.city_name,
+    country.country_name,
+    co.hourly_rate
+FROM
+    yrkesco.class c
+JOIN
+    yrkesco.program p ON c.program_id = p.program_id
+JOIN
+    yrkesco.program_course pc ON p.program_id = pc.program_id
+JOIN
+    yrkesco.course crs ON pc.course_id = crs.course_id
+JOIN
+    yrkesco.course_offering cof ON crs.course_id = cof.course_id
+JOIN
+    yrkesco.instructor i ON cof.instructor_id = i.instructor_id
+JOIN
+    yrkesco.person per ON i.person_id = per.person_id
+LEFT JOIN
+    yrkesco.company co ON i.company_id = co.company_id
+LEFT JOIN
+    yrkesco.tax_status ts ON co.tax_status_id = ts.tax_status_id
+LEFT JOIN yrkesco.address a ON co.address_id = a.address_id
+LEFT JOIN yrkesco.city city ON a.city_id = city.city_id
+LEFT JOIN yrkesco.country country ON city.country_id = country.country_id
+WHERE
+    c.class_id = 3; -- Change to the class_id you want
+
+-- Students enrolled in a specific class
+SELECT
+    c.class_id,
+    c.class_name,
+    s.student_id,
+    p.first_name,
+    p.last_name,
+    p.email
+FROM yrkesco.class c
+JOIN yrkesco.student s ON c.class_id = s.class_id
+JOIN yrkesco.person p ON s.person_id = p.person_id
+WHERE c.class_id = 4;

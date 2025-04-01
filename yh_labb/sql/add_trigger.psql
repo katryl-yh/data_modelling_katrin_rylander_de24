@@ -1,0 +1,16 @@
+-- Create the trigger function
+CREATE OR REPLACE FUNCTION check_manager_class_limit()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF (SELECT COUNT(*) FROM yrkesco.class WHERE manager_id = NEW.manager_id) >= 3 THEN
+        RAISE EXCEPTION 'A manager cannot manage more than 3 classes.';
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Create the trigger
+CREATE TRIGGER limit_manager_classes
+BEFORE INSERT OR UPDATE ON yrkesco.class
+FOR EACH ROW
+EXECUTE FUNCTION check_manager_class_limit();
