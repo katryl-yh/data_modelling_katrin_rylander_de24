@@ -1,0 +1,24 @@
+-- 1. identify a manager_id that already has three classes assigned to it
+SELECT manager_id, COUNT(*)
+FROM yrkesco.class
+GROUP BY manager_id
+HAVING COUNT(*) >= 3;
+
+-- manager_id = 2
+
+-- 2. try to insert a new row into the yrkesco.class table, assigning it to the manager identified in step 1
+
+INSERT INTO yrkesco.class (
+    class_name, 
+    program_id, 
+    iteration_number, 
+    manager_id
+    )
+VALUES (
+    'Test Class',
+     2, 
+     3, 
+     2
+     );
+
+-- GOT: ERROR: A manager cannot manage more than 3 classes.
