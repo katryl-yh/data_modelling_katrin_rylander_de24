@@ -91,9 +91,9 @@ CREATE TABLE IF NOT EXISTS program (
     program_name VARCHAR(100) NOT NULL,
     program_duration_years INTEGER,
     total_credits INTEGER,
-    approved_iterations INTEGER,
-    description TEXT
+    approved_iterations INTEGER
 );
+
 
 -- Create the course table
 CREATE TABLE IF NOT EXISTS course (
