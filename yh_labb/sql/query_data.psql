@@ -1,4 +1,4 @@
--- 1. retrieve information about a specific class 
+-- retrieve information about a specific class 
 -- class_id = 1 and the manager responsible for it
 
 SELECT
@@ -30,7 +30,7 @@ LEFT JOIN
 WHERE
     c.class_id = 1; 
 
--- query retrieves all the courses associated with a specific class,
+-- retrieve all the courses associated with a specific class,
 -- along with the course details
 
 SELECT
@@ -52,7 +52,7 @@ JOIN
 WHERE
     c.class_id = 2; -- Change to the class_id you want
 
--- query retrieves the number of courses associated with a specific class
+-- retrieve the number of courses associated with a specific class
 SELECT
     c.class_id,
     c.class_name,
@@ -70,7 +70,7 @@ WHERE
 GROUP BY
     c.class_id, c.class_name;
 
--- query retrieves the instructors who teach courses in a specific class, 
+-- retrieve the instructors who teach courses in a specific class, 
 -- along with their details and the course names
 SELECT
     c.class_id,
@@ -97,8 +97,8 @@ JOIN
 WHERE
     c.class_id = 5; -- Change to the class_id you want
 
---  query that retrieves the instructors who teach courses 
--- in a specific class, along with their details, 
+-- retrieve the instructors who teach courses in a specific class, 
+-- along with their details, 
 -- their company details and the course names
 
 SELECT
@@ -142,7 +142,7 @@ LEFT JOIN yrkesco.country country ON city.country_id = country.country_id
 WHERE
     c.class_id = 3; -- Change to the class_id you want
 
--- Students enrolled in a specific class
+-- retrieve students enrolled in a specific class
 SELECT
     c.class_id,
     c.class_name,
