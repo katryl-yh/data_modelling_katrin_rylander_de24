@@ -95,4 +95,3 @@ To copy multiple .csv files from your local machine into a Docker container, you
 If your container is already running, you can copy multiple .csv files like this:
 
 `docker cp /local/path/*.csv container_name:/container/path/`
-

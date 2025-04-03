@@ -1,0 +1,22 @@
+-- Set the search path
+SET search_path TO yrkesco;
+
+DROP TABLE IF EXISTS enrollment;
+DROP TABLE IF EXISTS grade;
+DROP TABLE IF EXISTS student;
+DROP TABLE IF EXISTS class;
+DROP TABLE IF EXISTS course_offering;
+DROP TABLE IF EXISTS program_course;
+DROP TABLE IF EXISTS course;
+DROP TABLE IF EXISTS program;
+DROP TABLE IF EXISTS school_location;
+DROP TABLE IF EXISTS instructor;
+DROP TABLE IF EXISTS class_manager;
+DROP TABLE IF EXISTS personal_information;
+DROP TABLE IF EXISTS person;
+DROP TABLE IF EXISTS company;
+DROP TABLE IF EXISTS contract_type;
+DROP TABLE IF EXISTS address;
+DROP TABLE IF EXISTS city;
+DROP TABLE IF EXISTS country;
+DROP TABLE IF EXISTS tax_status;

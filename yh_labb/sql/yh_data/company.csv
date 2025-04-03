@@ -1,7 +1,7 @@
 company_id,company_name,organization_number,tax_status_id,address_id,hourly_rate
-1,Alpha Consulting,1234567890,1,1,1000
-2,Beta Solutions,9876543210,1,2,800
-3,Gamma Tech,5432109876,1,3,1300
-4,Delta Systems,6789012345,1,4,1100
-5,Epsilon Group,2345678901,1,5,900
-6,Zeta Services,7890123456,1,6,1200
+1,Alpha Consulting,1234567890,TRUE,1,1000
+2,Beta Solutions,9876543210,TRUE,2,800
+3,Gamma Tech,5432109876,TRUE,3,1300
+4,Delta Systems,6789012345,TRUE,4,1100
+5,Epsilon Group,2345678901,TRUE,5,900
+6,Zeta Services,7890123456,TRUE,6,1200

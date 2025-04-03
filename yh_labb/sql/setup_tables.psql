@@ -1,92 +1,84 @@
--- Create the yrkesco schema
+-- Create the schema
 CREATE SCHEMA IF NOT EXISTS yrkesco;
-
--- Set the search path
 SET search_path TO yrkesco;
 
--- Create the country table
-CREATE TABLE IF NOT EXISTS country (
+-- Country Table
+CREATE TABLE country (
     country_id SERIAL PRIMARY KEY,
     country_name VARCHAR(100) NOT NULL
 );
 
--- Create the city table
-CREATE TABLE IF NOT EXISTS city (
+-- City Table
+CREATE TABLE city (
     city_id SERIAL PRIMARY KEY,
     city_name VARCHAR(100) NOT NULL,
-    country_id INTEGER REFERENCES country(country_id)
+    country_id INTEGER REFERENCES country(country_id) ON DELETE CASCADE
 );
 
--- Create the address table
-CREATE TABLE IF NOT EXISTS address (
+-- Address Table
+CREATE TABLE address (
     address_id SERIAL PRIMARY KEY,
     street VARCHAR(100) NOT NULL,
     street_number VARCHAR(20),
     postal_code VARCHAR(20),
-    city_id INTEGER REFERENCES city(city_id)
+    city_id INTEGER REFERENCES city(city_id) ON DELETE CASCADE
 );
 
--- Create the tax_status table
-CREATE TABLE IF NOT EXISTS tax_status (
-    tax_status_id SERIAL PRIMARY KEY,
-    tax_status_name VARCHAR(100) NOT NULL
-);
-
--- Create the contract_type table
-CREATE TABLE IF NOT EXISTS contract_type (
+-- Contract Type Table
+CREATE TABLE contract_type (
     contract_type_id SERIAL PRIMARY KEY,
     contract_type_name VARCHAR(100) NOT NULL
 );
 
--- Create the company table
-CREATE TABLE IF NOT EXISTS company (
+-- Company Table
+CREATE TABLE company (
     company_id SERIAL PRIMARY KEY,
     company_name VARCHAR(100) NOT NULL,
     organization_number VARCHAR(20) UNIQUE,
-    tax_status_id INTEGER REFERENCES tax_status(tax_status_id),
-    address_id INTEGER REFERENCES address(address_id),
-    hourly_rate INTEGER
+    F_tax_status BOOLEAN,
+    address_id INTEGER REFERENCES address(address_id) ON DELETE SET NULL,
+    hourly_rate INTEGER CHECK (hourly_rate >= 0)
 );
 
--- Create the person table
-CREATE TABLE IF NOT EXISTS person (
+-- Person Table
+CREATE TABLE person (
     person_id SERIAL PRIMARY KEY,
     first_name VARCHAR(100) NOT NULL,
     last_name VARCHAR(100) NOT NULL,
     email VARCHAR(255) UNIQUE NOT NULL
 );
 
--- Create the personal_information table
-CREATE TABLE IF NOT EXISTS personal_information (
-    person_id INTEGER PRIMARY KEY REFERENCES person(person_id),
+-- Personal Information Table
+CREATE TABLE personal_information (
+    person_id INTEGER PRIMARY KEY REFERENCES person(person_id) ON DELETE CASCADE,
     personal_number VARCHAR(20) UNIQUE NOT NULL
 );
 
--- Create the class_manager table
-CREATE TABLE IF NOT EXISTS class_manager (
+-- Class Manager Table
+CREATE TABLE class_manager (
     manager_id SERIAL PRIMARY KEY,
-    person_id INTEGER REFERENCES person(person_id),
-    contract_type_id INTEGER REFERENCES contract_type(contract_type_id),
-    company_id INTEGER REFERENCES company(company_id)
+    person_id INTEGER REFERENCES person(person_id) ON DELETE CASCADE,
+    contract_type_id INTEGER REFERENCES contract_type(contract_type_id) ON DELETE SET NULL,
+    company_id INTEGER REFERENCES company(company_id) ON DELETE SET NULL
 );
 
--- Create the instructor table
-CREATE TABLE IF NOT EXISTS instructor (
+-- Instructor Table
+CREATE TABLE instructor (
     instructor_id SERIAL PRIMARY KEY,
-    person_id INTEGER REFERENCES person(person_id),
-    contract_type_id INTEGER REFERENCES contract_type(contract_type_id),
-    company_id INTEGER REFERENCES company(company_id)
+    person_id INTEGER REFERENCES person(person_id) ON DELETE CASCADE,
+    contract_type_id INTEGER REFERENCES contract_type(contract_type_id) ON DELETE SET NULL,
+    company_id INTEGER REFERENCES company(company_id) ON DELETE SET NULL
 );
 
--- Create the school_location table
-CREATE TABLE IF NOT EXISTS school_location (
+-- School Location Table
+CREATE TABLE school_location (
     location_id SERIAL PRIMARY KEY,
     location_name VARCHAR(100) NOT NULL,
-    address_id INTEGER REFERENCES address(address_id)
+    address_id INTEGER REFERENCES address(address_id) ON DELETE CASCADE
 );
 
--- Create the program table
-CREATE TABLE IF NOT EXISTS program (
+-- Program Table
+CREATE TABLE program (
     program_id SERIAL PRIMARY KEY,
     program_name VARCHAR(100) NOT NULL,
     program_duration_years INTEGER,
@@ -94,9 +86,8 @@ CREATE TABLE IF NOT EXISTS program (
     approved_iterations INTEGER
 );
 
-
--- Create the course table
-CREATE TABLE IF NOT EXISTS course (
+-- Course Table
+CREATE TABLE course (
     course_id SERIAL PRIMARY KEY,
     course_name VARCHAR(100) NOT NULL,
     course_code VARCHAR(20) UNIQUE,
@@ -104,47 +95,47 @@ CREATE TABLE IF NOT EXISTS course (
     course_description TEXT
 );
 
--- Create the program_course table
-CREATE TABLE IF NOT EXISTS program_course (
-    program_id INTEGER REFERENCES program(program_id),
-    course_id INTEGER REFERENCES course(course_id),
+-- Program Course Table
+CREATE TABLE program_course (
+    program_id INTEGER REFERENCES program(program_id) ON DELETE CASCADE,
+    course_id INTEGER REFERENCES course(course_id) ON DELETE CASCADE,
     PRIMARY KEY (program_id, course_id)
 );
 
--- Create the course_offering table
-CREATE TABLE IF NOT EXISTS course_offering (
+-- Course Offering Table
+CREATE TABLE course_offering (
     offering_id SERIAL PRIMARY KEY,
-    course_id INTEGER REFERENCES course(course_id),
-    location_id INTEGER REFERENCES school_location(location_id),
-    instructor_id INTEGER REFERENCES instructor(instructor_id)
+    course_id INTEGER REFERENCES course(course_id) ON DELETE CASCADE,
+    location_id INTEGER REFERENCES school_location(location_id) ON DELETE SET NULL,
+    instructor_id INTEGER REFERENCES instructor(instructor_id) ON DELETE SET NULL
 );
 
--- Create the class table (moved up)
-CREATE TABLE IF NOT EXISTS class (
+-- Class Table
+CREATE TABLE class (
     class_id SERIAL PRIMARY KEY,
-    class_name VARCHAR(20),
-    program_id INTEGER REFERENCES program(program_id),
-    iteration_number INTEGER,
-    manager_id INTEGER REFERENCES class_manager(manager_id)
+    class_name VARCHAR(20) NOT NULL,
+    program_id INTEGER REFERENCES program(program_id) ON DELETE CASCADE,
+    iteration_number INTEGER NOT NULL,
+    manager_id INTEGER REFERENCES class_manager(manager_id) ON DELETE SET NULL
 );
 
--- Create the student table (moved down)
-CREATE TABLE IF NOT EXISTS student (
+-- Student Table
+CREATE TABLE student (
     student_id SERIAL PRIMARY KEY,
-    person_id INTEGER REFERENCES person(person_id),
-    class_id INTEGER REFERENCES class(class_id)
+    person_id INTEGER REFERENCES person(person_id) ON DELETE CASCADE,
+    class_id INTEGER REFERENCES class(class_id) ON DELETE SET NULL
 );
 
--- Create the grade table.
-CREATE TABLE IF NOT EXISTS grade (
+-- Grade Table
+CREATE TABLE grade (
     grade_id SERIAL PRIMARY KEY,
     grade_name VARCHAR(20)
 );
 
--- Create the enrollment table
-CREATE TABLE IF NOT EXISTS enrollment (
-    student_id INTEGER REFERENCES student(student_id),
-    offering_id INTEGER REFERENCES course_offering(offering_id),
-    grade_id INTEGER REFERENCES grade(grade_id),
+-- Enrollment Table
+CREATE TABLE enrollment (
+    student_id INTEGER REFERENCES student(student_id) ON DELETE CASCADE,
+    offering_id INTEGER REFERENCES course_offering(offering_id) ON DELETE CASCADE,
+    grade_id INTEGER REFERENCES grade(grade_id) ON DELETE SET NULL,
     PRIMARY KEY (student_id, offering_id)
 );
