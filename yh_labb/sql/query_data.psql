@@ -1,5 +1,5 @@
--- retrieve information about a specific class 
--- class_id = 1 and the manager responsible for it
+-- retrieve information on classes that belong to each program
+-- and the manager responsible for it
 
 SELECT
     c.class_id,
@@ -27,32 +27,57 @@ JOIN
     yrkesco.contract_type ct ON m.contract_type_id = ct.contract_type_id
 LEFT JOIN
     yrkesco.company co ON m.company_id = co.company_id
-WHERE
-    c.class_id = 1; 
+ORDER BY c.class_name;
 
--- retrieve all the courses associated with a specific class,
+-- retrieve information total_credits per program
+-- and compare it with the sum of credits per course
+
+SELECT
+    p.program_name,
+    p.total_credits,
+    SUM(crs.course_credits) AS sum_course_credits
+FROM
+    yrkesco.program p
+JOIN
+    yrkesco.program_course pc ON pc.program_id = p.program_id
+JOIN
+    yrkesco.course crs ON pc.course_id = crs.course_id
+GROUP BY p.program_name, p.total_credits;
+
+-- retrieve all the courses associated with a specific program,
 -- along with the course details
 
 SELECT
-    c.class_id,
-    c.class_name,
+    p.program_name,
     crs.course_id,
     crs.course_name,
     crs.course_code,
     crs.course_credits,
     crs.course_description
 FROM
-    yrkesco.class c
-JOIN
-    yrkesco.program p ON c.program_id = p.program_id
+    yrkesco.program p 
 JOIN
     yrkesco.program_course pc ON p.program_id = pc.program_id
 JOIN
     yrkesco.course crs ON pc.course_id = crs.course_id
 WHERE
-    c.class_id = 2; -- Change to the class_id you want
+    p.program_id = 3; -- Change to the program_id you want
 
--- retrieve the number of courses associated with a specific class
+-- retrieve the number of course_offerings 
+-- associated with any course
+
+SELECT 
+    c.course_id, 
+    c.course_name, 
+    COUNT(co.offering_id) AS total_offerings
+FROM yrkesco.course c
+LEFT JOIN yrkesco.course_offering co ON c.course_id = co.course_id
+GROUP BY c.course_id, c.course_name
+ORDER BY total_offerings DESC;
+
+
+-- retrieve the number of course_offerings 
+-- associated with a specific class
 SELECT
     c.class_id,
     c.class_name,
@@ -111,7 +136,7 @@ SELECT
     crs.course_name,
     co.company_name,
     co.organization_number,
-    ts.tax_status_name,
+    co.F_tax_status,
     a.street,
     a.street_number,
     a.postal_code,
@@ -134,8 +159,6 @@ JOIN
     yrkesco.person per ON i.person_id = per.person_id
 LEFT JOIN
     yrkesco.company co ON i.company_id = co.company_id
-LEFT JOIN
-    yrkesco.tax_status ts ON co.tax_status_id = ts.tax_status_id
 LEFT JOIN yrkesco.address a ON co.address_id = a.address_id
 LEFT JOIN yrkesco.city city ON a.city_id = city.city_id
 LEFT JOIN yrkesco.country country ON city.country_id = country.country_id
@@ -154,3 +177,19 @@ FROM yrkesco.class c
 JOIN yrkesco.student s ON c.class_id = s.class_id
 JOIN yrkesco.person p ON s.person_id = p.person_id
 WHERE c.class_id = 4;
+
+-- retrieve students enrolled in a specific course_offering
+-- with grade that is fail
+SELECT
+    crso.course_id,
+    s.student_id,
+    p.first_name,
+    p.last_name,
+    p.email,
+    g.grade_name
+FROM yrkesco.enrollment enr
+JOIN yrkesco.course_offering crso ON enr.offering_id = crso.offering_id
+JOIN yrkesco.student s ON enr.student_id = s.student_id
+JOIN yrkesco.person p ON s.person_id = p.person_id
+JOIN yrkesco.grade g ON enr.grade_id = g.grade_id
+WHERE crso.offering_id = 4 and g.grade_name LIKE 'fail';

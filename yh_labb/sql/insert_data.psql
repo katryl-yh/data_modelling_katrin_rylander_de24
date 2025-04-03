@@ -3,132 +3,125 @@ COPY yrkesco.country(country_id, country_name)
 FROM '/var/lib/postgresql/data/yh_data/country.csv'
 DELIMITER ',' CSV HEADER;
 
--- SELECT * FROM yrkesco.country; 
+--SELECT * FROM yrkesco.country; 
 
 -- Load city
 COPY yrkesco.city(city_id, city_name, country_id)
 FROM '/var/lib/postgresql/data/yh_data/city.csv'
 DELIMITER ',' CSV HEADER;
 
--- SELECT * FROM yrkesco.city; 
+--SELECT * FROM yrkesco.city; 
 
 -- Load address
 COPY yrkesco.address(address_id, street, street_number, postal_code, city_id)
 FROM '/var/lib/postgresql/data/yh_data/address.csv'
 DELIMITER ',' CSV HEADER;
 
--- SELECT * FROM yrkesco.address; 
-
--- Load tax_status
-COPY yrkesco.tax_status(tax_status_id, tax_status_name)
-FROM '/var/lib/postgresql/data/yh_data/tax_status.csv'
-DELIMITER ',' CSV HEADER;
-
--- SELECT * FROM yrkesco.tax_status; 
+--SELECT * FROM yrkesco.address; 
 
 -- Load contract_type
 COPY yrkesco.contract_type(contract_type_id, contract_type_name)
 FROM '/var/lib/postgresql/data/yh_data/contract_type.csv'
 DELIMITER ',' CSV HEADER;
 
--- SELECT * FROM yrkesco.contract_type; 
+--SELECT * FROM yrkesco.contract_type; 
 
 -- Load company
-COPY yrkesco.company(company_id, company_name, organization_number, tax_status_id, address_id, hourly_rate)
+COPY yrkesco.company(company_id, company_name, organization_number, F_tax_status, address_id, hourly_rate)
 FROM '/var/lib/postgresql/data/yh_data/company.csv'
 DELIMITER ',' CSV HEADER;
 
--- SELECT * FROM yrkesco.company; 
+--SELECT * FROM yrkesco.company; 
 
 -- Load person
 COPY yrkesco.person(person_id, first_name, last_name, email)
 FROM '/var/lib/postgresql/data/yh_data/person.csv'
 DELIMITER ',' CSV HEADER;
 
--- SELECT * FROM yrkesco.person; 
+--SELECT * FROM yrkesco.person; 
 
 -- Load personal_information
 COPY yrkesco.personal_information(person_id, personal_number)
 FROM '/var/lib/postgresql/data/yh_data/personal_information.csv'
 DELIMITER ',' CSV HEADER;
 
--- SELECT * FROM yrkesco.personal_information; 
+--SELECT * FROM yrkesco.personal_information; 
 
 -- Load class_manager
 COPY yrkesco.class_manager(manager_id, person_id, contract_type_id, company_id)
 FROM '/var/lib/postgresql/data/yh_data/class_manager.csv'
 DELIMITER ',' CSV HEADER;
 
--- SELECT * FROM yrkesco.class_manager; 
+--SELECT * FROM yrkesco.class_manager; 
 
 -- Load instructor
 COPY yrkesco.instructor(instructor_id, person_id, contract_type_id, company_id)
 FROM '/var/lib/postgresql/data/yh_data/instructor.csv'
 DELIMITER ',' CSV HEADER;
 
--- SELECT * FROM yrkesco.instructor; 
+--SELECT * FROM yrkesco.instructor; 
 
 -- Load school_location
 COPY yrkesco.school_location(location_id, location_name, address_id)
 FROM '/var/lib/postgresql/data/yh_data/school_location.csv'
 DELIMITER ',' CSV HEADER;
 
--- SELECT * FROM yrkesco.school_location;
+--SELECT * FROM yrkesco.school_location;
 
 -- Load program
 COPY yrkesco.program(program_id, program_name, program_duration_years, total_credits, approved_iterations)
 FROM '/var/lib/postgresql/data/yh_data/program.csv'
 DELIMITER ',' CSV HEADER;
 
--- SELECT * FROM yrkesco.program;
+--SELECT * FROM yrkesco.program;
 
 -- Load course
 COPY yrkesco.course(course_id, course_name, course_code, course_credits, course_description)
 FROM '/var/lib/postgresql/data/yh_data/course.csv'
 DELIMITER ',' CSV HEADER;
 
--- SELECT * FROM yrkesco.course;
+--SELECT * FROM yrkesco.course;
 
 -- Load program_course
 COPY yrkesco.program_course(program_id, course_id)
 FROM '/var/lib/postgresql/data/yh_data/program_course.csv'
 DELIMITER ',' CSV HEADER;
 
--- SELECT * FROM yrkesco.program_course;
+--SELECT * FROM yrkesco.program_course;
 
 -- Load course_offering
 COPY yrkesco.course_offering(offering_id, course_id, location_id, instructor_id)
 FROM '/var/lib/postgresql/data/yh_data/course_offering.csv'
 DELIMITER ',' CSV HEADER;
 
--- SELECT * FROM yrkesco.course_offering;
+--SELECT * FROM yrkesco.course_offering;
 
 -- Load class
 COPY yrkesco.class(class_id, class_name, program_id, iteration_number, manager_id)
 FROM '/var/lib/postgresql/data/yh_data/class.csv'
 DELIMITER ',' CSV HEADER;
 
--- SELECT * FROM yrkesco.class;
+--SELECT * FROM yrkesco.class;
 
 -- Load student
 COPY yrkesco.student(student_id, person_id, class_id)
 FROM '/var/lib/postgresql/data/yh_data/student.csv'
 DELIMITER ',' CSV HEADER;
 
--- SELECT * FROM yrkesco.student;
+--SELECT * FROM yrkesco.student;
 
 -- Load grade
 COPY yrkesco.grade(grade_id, grade_name)
 FROM '/var/lib/postgresql/data/yh_data/grade.csv'
 DELIMITER ',' CSV HEADER;
 
--- SELECT * FROM yrkesco.grade;
+--SELECT * FROM yrkesco.grade;
 
 -- Load enrollment
 COPY yrkesco.enrollment(student_id, offering_id, grade_id)
 FROM '/var/lib/postgresql/data/yh_data/enrollment.csv'
 DELIMITER ',' CSV HEADER;
 
--- SELECT * FROM yrkesco.enrollment;
+--SELECT * FROM yrkesco.enrollment;
 
 
