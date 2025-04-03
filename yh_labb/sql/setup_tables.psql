@@ -27,14 +27,14 @@ CREATE TABLE address (
 -- Contract Type Table
 CREATE TABLE contract_type (
     contract_type_id SERIAL PRIMARY KEY,
-    contract_type_name VARCHAR(100) NOT NULL
+    contract_type_name VARCHAR(100) UNIQUE NOT NULL
 );
 
 -- Company Table
 CREATE TABLE company (
     company_id SERIAL PRIMARY KEY,
     company_name VARCHAR(100) NOT NULL,
-    organization_number VARCHAR(20) UNIQUE,
+    organization_number VARCHAR(20) UNIQUE CHECK (organization_number IS NULL OR organization_number <> ''),
     F_tax_status BOOLEAN,
     address_id INTEGER REFERENCES address(address_id) ON DELETE SET NULL,
     hourly_rate INTEGER CHECK (hourly_rate >= 0)
@@ -45,7 +45,7 @@ CREATE TABLE person (
     person_id SERIAL PRIMARY KEY,
     first_name VARCHAR(100) NOT NULL,
     last_name VARCHAR(100) NOT NULL,
-    email VARCHAR(255) UNIQUE NOT NULL
+    email VARCHAR(255) UNIQUE NOT NULL CHECK (email ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$')
 );
 
 -- Personal Information Table
@@ -82,7 +82,7 @@ CREATE TABLE program (
     program_id SERIAL PRIMARY KEY,
     program_name VARCHAR(100) NOT NULL,
     program_duration_years INTEGER,
-    total_credits INTEGER,
+    total_credits INTEGER CHECK (total_credits > 0),
     approved_iterations INTEGER
 );
 
@@ -91,7 +91,7 @@ CREATE TABLE course (
     course_id SERIAL PRIMARY KEY,
     course_name VARCHAR(100) NOT NULL,
     course_code VARCHAR(20) UNIQUE,
-    course_credits INTEGER,
+    course_credits INTEGER NOT NULL CHECK (course_credits > 0),
     course_description TEXT
 );
 
@@ -115,7 +115,7 @@ CREATE TABLE class (
     class_id SERIAL PRIMARY KEY,
     class_name VARCHAR(20) NOT NULL,
     program_id INTEGER REFERENCES program(program_id) ON DELETE CASCADE,
-    iteration_number INTEGER NOT NULL,
+    iteration_number INTEGER NOT NULL CHECK (iteration_number >= 1),
     manager_id INTEGER REFERENCES class_manager(manager_id) ON DELETE SET NULL
 );
 
@@ -129,7 +129,7 @@ CREATE TABLE student (
 -- Grade Table
 CREATE TABLE grade (
     grade_id SERIAL PRIMARY KEY,
-    grade_name VARCHAR(20)
+    grade_name VARCHAR(20) UNIQUE NOT NULL
 );
 
 -- Enrollment Table
