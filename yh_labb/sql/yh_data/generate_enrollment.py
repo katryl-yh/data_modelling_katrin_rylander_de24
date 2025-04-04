@@ -1,5 +1,11 @@
 import csv
 import random
+from pathlib import Path
+from pprint import pprint
+
+file_path = Path(__file__).parent 
+
+print(file_path)
 
 def generate_enrollment_csv(filename="enrollment.csv"):
     """Generates enrollment data and saves it to a CSV file."""
@@ -11,6 +17,7 @@ def generate_enrollment_csv(filename="enrollment.csv"):
     for student_id in DE23:
         for offering_id in range(1, 13):
             grade_id = random.choice([1, 2, 3])
+            #print([student_id, offering_id, grade_id])
             enrollments.append([student_id, offering_id, grade_id])
 
     # BIM23 (class_id = 2)
@@ -18,6 +25,7 @@ def generate_enrollment_csv(filename="enrollment.csv"):
     for student_id in BIM23:
         for offering_id in range(13, 26):
             grade_id = random.choice([1, 2, 3])
+            #print([student_id, offering_id, grade_id])
             enrollments.append([student_id, offering_id, grade_id])
 
     # DE24 (class_id = 3)
@@ -25,6 +33,7 @@ def generate_enrollment_csv(filename="enrollment.csv"):
     for student_id in DE24:
         for offering_id in range(26, 32):
             grade_id = random.choice([1, 2, 3])
+            #print([student_id, offering_id, grade_id])
             enrollments.append([student_id, offering_id, grade_id])
 
     # BIM24 (class_id = 4)
@@ -32,6 +41,7 @@ def generate_enrollment_csv(filename="enrollment.csv"):
     for student_id in BIM24: # corrected range
         for offering_id in range(32, 41):
             grade_id = random.choice([1, 2, 3])
+            #print([student_id, offering_id, grade_id])
             enrollments.append([student_id, offering_id, grade_id])
 
     # UX24 (class_id = 5)
@@ -39,6 +49,7 @@ def generate_enrollment_csv(filename="enrollment.csv"):
     for student_id in UX24: # corrected range
         for offering_id in range(41, 47):
             grade_id = random.choice([1, 2, 3])
+            #print([student_id, offering_id, grade_id])
             enrollments.append([student_id, offering_id, grade_id])
 
     # stand alone course 38, location will be: online
@@ -49,10 +60,12 @@ def generate_enrollment_csv(filename="enrollment.csv"):
     for student_id in range (36,46):
         enrollments.append([student_id,48, random.choice([1,2,3])])
 
-    with open(filename, "w", newline="") as csvfile:
+    #pprint(enrollments)
+    with open(file_path / filename, "w", newline="") as csvfile:
         writer = csv.writer(csvfile)
         writer.writerow(["student_id", "offering_id", "grade_id"])  # Header
         writer.writerows(enrollments)
-
-generate_enrollment_csv()
-print(f"enrollment.csv generated successfully.")
+    
+if __name__ == "__main__":
+    generate_enrollment_csv()
+    print(f"enrollment.csv generated successfully.")

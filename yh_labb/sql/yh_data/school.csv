@@ -1,3 +1,4 @@
 location_id,location_name,address_id
-1,Liljeholmen Campus,7
-2,Göteborg Campus,8
+1,Liljeholmen Campus,7.0
+2,Göteborg Campus,8.0
+3,online,
