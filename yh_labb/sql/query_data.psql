@@ -76,7 +76,7 @@ GROUP BY c.course_id, c.course_name
 ORDER BY total_offerings DESC;
 
 
--- retrieve the number of course_offerings 
+-- retrieve the number of courses
 -- associated with a specific class
 SELECT
     c.class_id,
@@ -91,7 +91,7 @@ JOIN
 JOIN
     yrkesco.course crs ON pc.course_id = crs.course_id
 WHERE
-    c.class_id = 3
+    c.class_id = 5
 GROUP BY
     c.class_id, c.class_name;
 
@@ -192,4 +192,4 @@ JOIN yrkesco.course_offering crso ON enr.offering_id = crso.offering_id
 JOIN yrkesco.student s ON enr.student_id = s.student_id
 JOIN yrkesco.person p ON s.person_id = p.person_id
 JOIN yrkesco.grade g ON enr.grade_id = g.grade_id
-WHERE crso.offering_id = 4 and g.grade_name LIKE 'fail';
+WHERE crso.offering_id = 4 and g.grade_name = 'fail';
