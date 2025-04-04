@@ -107,7 +107,9 @@ CREATE TABLE course_offering (
     offering_id SERIAL PRIMARY KEY,
     course_id INTEGER REFERENCES course(course_id) ON DELETE CASCADE,
     location_id INTEGER REFERENCES school_location(location_id) ON DELETE SET NULL,
-    instructor_id INTEGER REFERENCES instructor(instructor_id) ON DELETE SET NULL
+    instructor_id INTEGER REFERENCES instructor(instructor_id) ON DELETE SET NULL,
+    term TEXT CHECK (term IN ('VT', 'HT', 'ST')),
+    year INTEGER CHECK (year >= 2000 AND year <= 2100)
 );
 
 -- Class Table
