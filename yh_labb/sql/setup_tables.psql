@@ -83,7 +83,7 @@ CREATE TABLE program (
     program_name VARCHAR(100) NOT NULL,
     program_duration_years INTEGER,
     total_credits INTEGER CHECK (total_credits > 0),
-    approved_iterations INTEGER
+    approved_iterations INTEGER CHECK (approved_iterations > 0)
 );
 
 -- Course Table

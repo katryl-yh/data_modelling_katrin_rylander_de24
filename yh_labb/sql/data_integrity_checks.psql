@@ -1,0 +1,116 @@
+/* Queries below aim to ensure that database maintains:
+ integrity, consistency, and correctness by flagging potential issues.*/
+
+
+-- 1. Check for Duplicate Emails in person Table
+-- Make sure no one has a duplicate email address, which should be unique.
+
+SELECT email, COUNT(*) 
+FROM yrkesco.person
+GROUP BY email
+HAVING COUNT(*) > 1;
+
+-- 2. Check for Orphan Records in class_manager (Missing Person or Company)
+-- Make sure there are no records in class_manager 
+-- that reference a non-existent person or company.
+
+SELECT *
+FROM yrkesco.class_manager m
+WHERE m.person_id NOT IN (SELECT person_id FROM yrkesco.person)
+   OR m.company_id NOT IN (SELECT company_id FROM yrkesco.company);
+
+
+-- 3. Check for Orphan Records in instructor (Missing Person or Company)
+-- Make sure there are no records in instructor
+-- that reference a non-existent person or company.
+
+SELECT *
+FROM yrkesco.instructor i
+WHERE i.person_id NOT IN (SELECT person_id FROM yrkesco.person)
+   OR i.company_id NOT IN (SELECT company_id FROM yrkesco.company);
+
+-- 4. Check for Unassigned address_id in company Table
+-- Ensure all companies have an address assigned 
+-- (unless the address is explicitly set to NULL).
+
+SELECT *
+FROM yrkesco.company
+WHERE address_id IS NOT NULL 
+  AND address_id NOT IN (SELECT address_id FROM yrkesco.address);
+
+-- 5. Check for Classes Without Managers
+-- Ensure that every class has a manager assigned, 
+-- as the manager_id is a foreign key in class.
+
+SELECT *
+FROM yrkesco.class
+WHERE manager_id IS NULL;
+
+-- 6. Check for Missing Courses in Program-Course Relationship
+-- Make sure every course listed in the program_course table 
+-- exists in the course table.
+
+SELECT *
+FROM yrkesco.program_course pc
+WHERE pc.course_id NOT IN (SELECT course_id FROM yrkesco.course);
+
+-- 7. Check which Courses are without course_offering yet-
+-- Check which course in the course table 
+-- has no offering in the course_offering table.
+
+SELECT c.course_id, c.course_name
+FROM yrkesco.course c
+LEFT JOIN yrkesco.course_offering co ON c.course_id = co.course_id
+WHERE co.offering_id IS NULL;
+
+-- 8. Check for Students Without Enrollment in Any Class
+
+SELECT s.student_id, p.first_name, p.last_name, p.email
+FROM yrkesco.student s
+JOIN yrkesco.person p ON s.person_id = p.person_id
+WHERE s.class_id IS NULL;
+
+
+-- 9. Check for Enrollment Without a Grade
+-- Ensure that students who are enrolled in courses have an assigned grade.
+
+SELECT e.student_id, p.first_name, p.last_name
+FROM yrkesco.enrollment e
+JOIN yrkesco.student s ON e.student_id = s.student_id
+JOIN yrkesco.person p ON s.person_id = p.person_id
+WHERE e.grade_id IS NULL;
+
+-- NOTE, it should be ok to have a null grade until the end of the course_offering
+
+-- 10. Check for Students with Multiple Enrollments in the Same Offering
+-- Ensure no student is enrolled in the same course offering more than once.
+
+SELECT student_id, offering_id, COUNT(*)
+FROM yrkesco.enrollment
+GROUP BY student_id, offering_id
+HAVING COUNT(*) > 1;
+
+-- 11. Check for Instructors Without Assigned Courses
+-- It is ok to have an instructor without an assigned course_offering
+-- because the course might not be running as a specific term
+
+SELECT i.instructor_id, per.first_name, per.last_name
+FROM yrkesco.instructor i
+JOIN yrkesco.person per ON i.person_id = per.person_id
+LEFT JOIN yrkesco.course_offering co ON i.instructor_id = co.instructor_id
+WHERE co.offering_id IS NULL;
+
+-- 12. Find free-standing Courses That Are Not Associated with Any Program
+
+SELECT crs.course_id, crs.course_name
+FROM yrkesco.course crs
+LEFT JOIN yrkesco.program_course pc ON crs.course_id = pc.course_id
+WHERE pc.program_id IS NULL;
+
+-- 13. Check for Duplicate Classes
+-- Check for the same class_name and program_id combinations.
+
+SELECT program_id, class_name, COUNT(*)
+FROM yrkesco.class
+GROUP BY program_id, class_name
+HAVING COUNT(*) > 1;
