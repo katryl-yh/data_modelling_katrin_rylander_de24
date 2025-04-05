@@ -1,82 +1,10 @@
--- list the student_id numbers per each class
-SELECT
-    cls.class_id,
-    cls.class_name,
-    s.student_id
-FROM
-    yrkesco.class cls
-JOIN
-    yrkesco.student s ON cls.class_id = s.class_id
-ORDER BY
-    cls.class_id, s.student_id;
-
--- Check for Students Without Enrollment in Any Course
--- Ensure that no student is missing from any course enrollment, 
--- which might indicate a student without a course.
-
-SELECT 
-    s.student_id, 
-    p.first_name, 
-    p.last_name, 
-    c.class_id, 
-    c.class_name
-FROM yrkesco.student s
-JOIN yrkesco.person p ON s.person_id = p.person_id
-LEFT JOIN yrkesco.class c ON s.class_id = c.class_id
-WHERE s.student_id NOT IN (SELECT student_id FROM yrkesco.enrollment);
-
-
-WITH student_counts AS (
-    -- Count the total students per class
-    SELECT 
-        s.class_id, 
-        COUNT(s.student_id) AS total_students_in_class
-    FROM yrkesco.student s
-    GROUP BY s.class_id
-),
-enrollment_counts AS (
-    -- Count unique student enrollments per class
-    SELECT 
-        s.class_id, 
-        COUNT(DISTINCT e.student_id) AS total_enrolled_students,
-        COUNT(DISTINCT e.offering_id) AS total_courses_students_enrolled_in
-    FROM yrkesco.student s
-    LEFT JOIN yrkesco.enrollment e ON s.student_id = e.student_id
-    GROUP BY s.class_id
-),
-course_offering_counts AS (
-    -- Count the number of course offerings per class
-    SELECT 
-        c.class_id, 
-        COUNT(DISTINCT co.offering_id) AS total_course_offerings_for_class
-    FROM yrkesco.class c
-    LEFT JOIN yrkesco.program p ON c.program_id = p.program_id
-    LEFT JOIN yrkesco.program_course pc ON p.program_id = pc.program_id
-    LEFT JOIN yrkesco.course_offering co ON pc.course_id = co.course_id
-    GROUP BY c.class_id
-)
-SELECT 
-    c.class_id,
-    c.class_name,
-    COALESCE(sc.total_students_in_class, 0) AS total_students_in_class,
-    COALESCE(ec.total_enrolled_students, 0) AS total_enrolled_students,
-    COALESCE(ec.total_courses_students_enrolled_in, 0) AS total_courses_students_enrolled_in,
-    COALESCE(coc.total_course_offerings_for_class, 0) AS total_course_offerings_for_class
-FROM yrkesco.class c
-LEFT JOIN student_counts sc ON c.class_id = sc.class_id
-LEFT JOIN enrollment_counts ec ON c.class_id = ec.class_id
-LEFT JOIN course_offering_counts coc ON c.class_id = coc.class_id
-ORDER BY c.class_name;
-
--- gives wrong VALUES
 -- Check for Duplicate Entries in program_course
-
 SELECT program_id, course_id, COUNT(*)
 FROM yrkesco.program_course
 GROUP BY program_id, course_id
 HAVING COUNT(*) > 1;
 
--- NONE
+-- Returs: NONE
 
 -- Check for Courses Linked to Multiple Programs
 SELECT course_id, COUNT(DISTINCT program_id)
@@ -84,18 +12,18 @@ FROM yrkesco.program_course
 GROUP BY course_id
 HAVING COUNT(DISTINCT program_id) > 1;
 
--- NONE
+-- Returns: NONE
 
 -- Verify How Many Courses a Program Should Have
-
 SELECT 
     program_id,
     COUNT(DISTINCT crs.course_id)
 FROM yrkesco.program_course crs
 GROUP BY program_id;
 
--- returns all course names,
--- the programs they belong to, and the number of offerings for each course
+-- Return all course names,
+-- the programs they belong to, 
+-- and the number of offerings for each course
 
 SELECT 
     p.program_id,

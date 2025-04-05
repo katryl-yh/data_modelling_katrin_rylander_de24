@@ -1,0 +1,180 @@
+-- 1. Check the Classes Linked to Programs
+
+SELECT class_id, class_name, program_id
+FROM yrkesco.class
+WHERE class_id IN (1, 2, 3, 4, 5);  -- Check specific class ids
+
+
+-- 2. Check Programs and Their Courses
+-- confirm that the program is correctly linked to its courses.
+
+SELECT program_id, course_id
+FROM yrkesco.program_course
+WHERE program_id IN (1, 2, 3);
+
+-- 3. Validate Course Offerings
+-- verify that course_offering records exist for those courses.
+
+SELECT course_id, offering_id, location_id
+FROM yrkesco.course_offering
+WHERE course_id BETWEEN 1 AND 36;
+
+
+-- 4. Check Student Enrollment
+-- ensure students are  linked to the classes properly:
+
+SELECT class_id, COUNT(student_id) AS total_students
+FROM yrkesco.student
+GROUP BY class_id;
+
+SELECT 
+    s.student_id,
+    s.class_id,
+    co.offering_id,
+    c.course_id,
+    c.course_name
+FROM yrkesco.student s
+-- Join the class and program_course to find the course assigned to the class
+JOIN yrkesco.class cls ON s.class_id = cls.class_id
+JOIN yrkesco.program_course pc ON cls.program_id = pc.program_id
+JOIN yrkesco.course c ON pc.course_id = c.course_id
+-- Join course offerings linked to the courses
+LEFT JOIN yrkesco.course_offering co ON co.course_id = c.course_id
+-- Filter for students in class_id = 1
+WHERE s.class_id = 1;
+
+--------------------------
+-- Count number of courses that the student has enrolled into
+-- and show which class this student belongs to
+
+
+SELECT 
+    e.student_id,
+    s.class_id,
+    count (e.student_id) as total_enrollments_per_student
+FROM yrkesco.enrollment e
+JOIN yrkesco.student s ON e.student_id = s.student_id
+GROUP BY e.student_id,s.class_id
+ORDER BY s.class_id;
+
+
+SELECT 
+    co.offering_id,   -- Select the specific course offering
+    c.course_id,      -- Include the course ID
+    c.course_name,    -- Include the course name
+    COUNT(e.student_id) AS total_enrollments_per_offering 
+    -- Count how many students are enrolled in each offering
+FROM yrkesco.enrollment e
+-- Join to course_offering to get which offering the student is enrolled in
+JOIN yrkesco.course_offering co ON co.offering_id = e.offering_id
+-- Join to course to get course details like name and id (course_offering has course_id)
+JOIN yrkesco.course c ON co.course_id = c.course_id
+-- Join to student to filter based on their class
+JOIN yrkesco.student s ON e.student_id = s.student_id
+-- Join to class to access class_id (to know which class the student belongs to)
+JOIN yrkesco.class cls ON s.class_id = cls.class_id
+-- Filter for students who belong to a specific class (e.g., class_id = 5)
+WHERE s.class_id = 5
+-- Group by offering and course info to get the count per course offering
+GROUP BY 
+    co.offering_id,
+    c.course_id,
+    c.course_name
+-- Order the results by offering, course id, and course name for consistent display
+ORDER BY 
+    co.offering_id,
+    c.course_id,
+    c.course_name;
+
+
+/* Filter out enrollments for courses that are not part of the class’s program.
+TO ADD:
+Identify the program_id of the class with class_id = 1.
+Join program_course only select courses that are actually in that program.*/
+
+SELECT 
+    co.offering_id,
+    c.course_id,
+    c.course_name,
+    COUNT(e.student_id) AS total_enrollments_per_student
+FROM yrkesco.enrollment e
+JOIN yrkesco.course_offering co ON e.offering_id = co.offering_id
+JOIN yrkesco.course c ON co.course_id = c.course_id
+JOIN yrkesco.student s ON e.student_id = s.student_id
+JOIN yrkesco.class cls ON s.class_id = cls.class_id
+JOIN yrkesco.program_course pc ON c.course_id = pc.course_id
+-- Make sure only courses from the same program as the class are included
+WHERE s.class_id = 5
+  AND pc.program_id = cls.program_id
+GROUP BY 
+    co.offering_id,
+    c.course_id,
+    c.course_name
+ORDER BY 
+    co.offering_id,
+    c.course_id,
+    c.course_name;
+
+
+----
+SELECT 
+    cls.class_id,
+    co.offering_id,
+    c.course_name,
+    COUNT(e.student_id) AS total_enrollments
+FROM yrkesco.enrollment e
+JOIN yrkesco.course_offering co ON co.offering_id = e.offering_id
+JOIN yrkesco.course c ON co.course_id = c.course_id
+JOIN yrkesco.student s ON e.student_id = s.student_id
+JOIN yrkesco.class cls ON s.class_id = cls.class_id
+JOIN yrkesco.program_course pc ON c.course_id = pc.course_id
+-- Only include courses linked to the program the class belongs to
+WHERE pc.program_id = cls.program_id
+GROUP BY 
+    cls.class_id,
+    co.offering_id,
+    c.course_name
+ORDER BY 
+    cls.class_id,
+    co.offering_id;
+
+/* How many distinct course offerings have students from a specific class been enrolled to?
+NOTE: This is different from "how many offerings exist for that program." 
+We want real, used offerings — i.e., those in the enrollment table,
+where the student belongs to a specific class.*/
+
+SELECT 
+    s.class_id,
+    COUNT(DISTINCT e.offering_id) AS total_number_course_offerings
+FROM yrkesco.enrollment e
+JOIN yrkesco.student s ON e.student_id = s.student_id
+GROUP BY s.class_id
+ORDER BY s.class_id;
+-- the values are not correct, we need to 
+-- only count course offerings that are tied to a program 
+-- those where the course is in program_course 
+-- and matches the class’s program.
+
+SELECT 
+    cls.class_id,
+    COUNT(DISTINCT e.offering_id) AS total_number_course_offerings
+FROM yrkesco.enrollment e
+JOIN yrkesco.student s ON e.student_id = s.student_id
+JOIN yrkesco.class cls ON s.class_id = cls.class_id
+JOIN yrkesco.course_offering co ON e.offering_id = co.offering_id
+JOIN yrkesco.program_course pc ON co.course_id = pc.course_id
+-- Filter: only count courses that are linked to the class’s program
+WHERE pc.program_id = cls.program_id
+GROUP BY cls.class_id
+ORDER BY cls.class_id;
+
+
+
+
+
+
+
+
+
+
+
