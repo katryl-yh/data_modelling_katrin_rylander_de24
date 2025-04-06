@@ -1,124 +1,125 @@
-Table student {
-  student_id int [pk]
-  person_id int [unique, ref: > person.person_id]
-  class_id int [ref: > class.class_id]
+Table country {
+  country_id serial [pk]
+  country_name varchar(100) [not null]
+}
+
+Table city {
+  city_id serial [pk]
+  city_name varchar(100) [not null]
+  country_id int [ref: > country.country_id]
+}
+
+Table address {
+  address_id serial [pk]
+  street varchar(100) [not null]
+  street_number varchar(20)
+  postal_code varchar(20)
+  city_id int [ref: > city.city_id]
+}
+
+Table contract_type {
+  contract_type_id serial [pk]
+  contract_type_name varchar(100) [not null, unique]
+}
+
+Table company {
+  company_id serial [pk]
+  company_name varchar(100) [not null]
+  organization_number varchar(20) [unique]
+  F_tax_status boolean
+  address_id int [ref: > address.address_id]
+  hourly_rate int [note: 'CHECK (hourly_rate >= 0)']
 }
 
 Table person {
-  person_id int [pk, unique]
-  first_name varchar
-  last_name varchar
-  email varchar [unique]
+  person_id serial [pk]
+  first_name varchar(100) [not null]
+  last_name varchar(100) [not null]
+  email varchar(255) [not null, unique]
 }
 
 Table personal_information {
   person_id int [pk, ref: > person.person_id]
-  personal_number varchar [unique]
+  personal_number varchar(20) [not null, unique]
 }
 
 Table class_manager {
-  manager_id int [pk]
+  manager_id serial [pk]
   person_id int [ref: > person.person_id]
   contract_type_id int [ref: > contract_type.contract_type_id]
-  company_id int [null, ref: > company.company_id]
+  company_id int [ref: > company.company_id]
 }
 
 Table instructor {
-  instructor_id int [pk]
+  instructor_id serial [pk]
   person_id int [ref: > person.person_id]
   contract_type_id int [ref: > contract_type.contract_type_id]
-  company_id int [null, ref: > company.company_id]
-}
-
-Table contract_type {
-  contract_type_id int [pk]
-  contract_type_name varchar
-}
-
-Table company {
-  company_id int [pk]
-  company_name varchar
-  organization_number varchar
-  tax_status_id int [ref: > tax_status.tax_status_id]
-  address_id int [ref: > address.address_id]
-  hourly_rate decimal [null]
-}
-
-Table tax_status {
-  tax_status_id int [pk]
-  tax_status varchar
-}
-
-Table address {
-  address_id int [pk]
-  street varchar
-  street_number varchar
-  postal_code varchar
-  city_id int [ref: > city.city_id]
-}
-
-Table city {
-  city_id int [pk]
-  city_name varchar
-  country_id int [ref: > country.country_id]
-}
-
-Table country {
-  country_id int [pk]
-  country_name varchar
-}
-
-Table program {
-  program_id int [pk]
-  program_name varchar
-  program_duration_years int
-  total_credits int
-  approved_iterations int
-}
-
-Table class {
-  class_id int [pk]
-  class_name varchar
-  program_id int [ref: > program.program_id]
-  iteration_number int
-  manager_id int [ref: > class_manager.manager_id]
-}
-
-Table course {
-  course_id int [pk]
-  course_name varchar
-  course_code varchar [unique]
-  course_credits int
-  course_description text
-}
-
-Table course_offering {
-  offering_id int [pk]
-  course_id int [ref: > course.course_id]
-  location_id int [ref: > school_location.location_id]
-  instructor_id int [ref: > instructor.instructor_id]
-  start_date date
-  end_date date
+  company_id int [ref: > company.company_id]
 }
 
 Table school_location {
-  location_id int [pk]
-  location_name varchar
+  location_id serial [pk]
+  location_name varchar(100) [not null]
   address_id int [ref: > address.address_id]
 }
 
-Table program_course {
-  course_id int [pk, ref: > course.course_id]
-  program_id int [pk, ref: > program.program_id]
+Table program {
+  program_id serial [pk]
+  program_name varchar(100) [not null]
+  program_duration_years int
+  total_credits int 
+  approved_iterations int 
 }
 
-Table enrollment {
-  student_id int [pk, ref: > student.student_id]
-  course_offering_id int [pk, ref: > course_offering.offering_id]
-  grade_id int [ref: > grade.grade_id]
+Table course {
+  course_id serial [pk]
+  course_name varchar(100) [not null]
+  course_code varchar(20) [unique]
+  course_credits int [not null]
+  course_description text
+}
+
+Table program_course {
+  program_id int [ref: > program.program_id]
+  course_id int [ref: > course.course_id]
+  indexes {
+    (program_id, course_id) [pk]
+  }
+}
+
+Table course_offering {
+  offering_id serial [pk]
+  course_id int [ref: > course.course_id]
+  location_id int [ref: > school_location.location_id]
+  instructor_id int [ref: > instructor.instructor_id]
+  term text [note: "CHECK (term IN ('VT', 'HT', 'ST'))"]
+  year int [note: 'CHECK (year >= 2000 AND year <= 2100)']
+}
+
+Table class {
+  class_id serial [pk]
+  class_name varchar(20) [not null]
+  program_id int [ref: > program.program_id]
+  iteration_number int [not null]
+  manager_id int [ref: > class_manager.manager_id]
+}
+
+Table student {
+  student_id serial [pk]
+  person_id int [ref: > person.person_id]
+  class_id int [ref: > class.class_id]
 }
 
 Table grade {
-  grade_id int [pk]
-  grade varchar
+  grade_id serial [pk]
+  grade_name varchar(20) [not null, unique]
+}
+
+Table enrollment {
+  student_id int [ref: > student.student_id]
+  offering_id int [ref: > course_offering.offering_id]
+  grade_id int [ref: > grade.grade_id]
+  indexes {
+    (student_id, offering_id) [pk]
+  }
 }
